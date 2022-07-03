@@ -4,6 +4,7 @@
 ;; sync' after modifying this file!
 
 
+
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
 (setq user-full-name "Alberto Valdez"
