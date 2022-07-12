@@ -15,79 +15,38 @@
 ;;      directory (for easy access to its source code).
 
 
+;; PYTHON
 (setq python-shell-completion-native-enable nil)
+;; (setq lsp-pylsp-plugins-flake8-enabled t)
+;; (setq lsp-pylsp-plugins-flake8-max-line-length 69)
 (setq org-babel-python-command "python3")
-(setq lsp-pylsp-plugins-flake8-enabled t)
-(setq lsp-pylsp-plugins-flake8-max-line-length 69)
+;; (setenv "PYTHONPATH" "/Users/albertovaldez/.pyenv/shims/python")
 
+(eval-after-load "org"
+  '(require 'ox-gfm nil t))
+
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(menu-bar-mode -1)
 (set-face-attribute 'default nil :height 150)
 
 (setq default-frame-alist
       '((width . 69) (height . 42)))
 
-(add-to-list 'default-frame-alist '(alpha . (90 . 90)))
+;;(add-to-list 'default-frame-alist '(alpha . (90 . 90)))
+(add-to-list 'default-frame-alist '(alpha . (100 . 100)))
 
 (setenv "DICTIONARY" "en_US")
 (setq ispell-dictionary "en_US")
 
-;; PRESENTATION MODE START
-;;
+(setq lsp-ui-doc-enable t)
+(setq lsp-ui-doc-show-with-cursor t)
+(setq lsp-ui-doc-show-with-mouse t)
 
-(setq visual-fill-column-width 60
-      visual-fill-column-center-text t)
+; (when (memq window-system '(mac ns x))
+;   (exec-path-from-shell-initialize))
 
-
-(defun my/org-present-prepare-slide (buffer-name heading)
-  ;; Show only top-level headlines
-  (org-overview)
-
-  ;; Unfold the current entry
-  (org-show-entry)
-
-  ;; Show only direct subheadings of the slide but don't expand them
-  (org-show-children))
-
-
-
-(defun my/org-pre ()
-  ;; Center presentation and wrap lines
-  (setq-local face-remapping-alist '((default (:height 1.5) variable-pitch)
-                                     (header-line (:height 4.0) variable-pitch)
-                                     (org-document-title (:height 1.75) org-document-title)
-                                     (org-code (:height 1.55) org-code)
-                                     (org-verbatim (:height 1.55) org-verbatim)
-                                     (org-block (:height 1.25) org-block)
-                                     (org-block-begin-line (:height 0.7) org-block)))
-  (org-display-inline-images)
-
-  (setq header-line-format " ")
-
-  (visual-fill-column-mode 1)
-  (visual-line-mode 1))
-
-
-
-(defun my/org-pre-quit ()
-
-  (setq-local face-remapping-alist '((default variable-pitch default)))
-
-  ;; Stop centering
-  (org-remove-inline-images)
-
-  (setq header-line-format nil)
-
-  (visual-fill-column-mode 0)
-  (visual-line-mode 0))
-
-
-(add-hook 'org-mode-hook 'variable-pitch-mode)
-(add-hook 'org-present-mode-hook 'my/org-pre)
-(add-hook 'org-present-mode-quit-hook 'my/org-pre-quit)
-(add-hook 'org-present-after-navigate-functions 'my/org-present-prepare-slide)
-
-;;
-;; PRESENTATION MODE END
-
+;; ORG MODE
 
 
 ;; DOOM
@@ -167,7 +126,7 @@
        ;;debugger          ; FIXME stepping through code, to help you add bugs
        ;;direnv
        ;;docker
-       editorconfig      ; let someone else argue about tabs vs spaces
+       ;; editorconfig      ; let someone else argue about tabs vs spaces
        ein               ; tame Jupyter notebooks with emacs
        (eval +overlay)     ; run code, run (also, repls)
        ;;gist              ; interacting with github gists
@@ -230,11 +189,11 @@
        ;;nim               ; python + lisp at the speed of c
        ;;nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
-       org               ; organize your plain life in plain text
+       (org +pretty)       ; organize your plain life in plain text
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
-       (python +lsp)           ; beautiful is better than ugly
+       (python +lsp +pyenv) ; beautiful is better than ugly
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        ;;raku              ; the artist formerly known as perl6
@@ -269,3 +228,5 @@
        :config
        ;;literate
        (default +bindings +smartparens))
+
+

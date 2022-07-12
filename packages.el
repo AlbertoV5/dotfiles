@@ -5,8 +5,11 @@
 ;; on the command line, then restart Emacs for the changes to take effect -- or
 ;; use 'M-x doom/reload'.
 
-(package! org-present)
-(package! visual-fill-column)
+; (package! org-present)
+; (package! visual-fill-column)
+; (package! exec-path-from-shell)
+(package! ox-gfm)
+
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 ;(package! some-package)
 
