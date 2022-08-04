@@ -14,14 +14,6 @@
 ;;      Alternatively, press 'gd' (or 'C-c c d') on a module to browse its
 ;;      directory (for easy access to its source code).
 
-
-;; PYTHON
-(setq python-shell-completion-native-enable nil)
-;; (setq lsp-pylsp-plugins-flake8-enabled t)
-;; (setq lsp-pylsp-plugins-flake8-max-line-length 69)
-(setq org-babel-python-command "python3")
-;; (setenv "PYTHONPATH" "/Users/albertovaldez/.pyenv/shims/python")
-
 (eval-after-load "org"
   '(require 'ox-gfm nil t))
 
@@ -39,15 +31,78 @@
 (setenv "DICTIONARY" "en_US")
 (setq ispell-dictionary "en_US")
 
-(setq lsp-ui-doc-enable t)
-(setq lsp-ui-doc-show-with-cursor t)
-(setq lsp-ui-doc-show-with-mouse t)
+;;(setq lsp-ui-doc-enable t)
+;;(setq lsp-ui-doc-show-with-cursor t)
+;;(setq lsp-ui-doc-show-with-mouse t)
 
 ; (when (memq window-system '(mac ns x))
 ;   (exec-path-from-shell-initialize))
 
-;; ORG MODE
+;; PYTHON
+(setq python-shell-completion-native-enable nil)
+;;(setq lsp-pylsp-plugins-flake8-enabled t)
+(setq org-babel-python-command "python")
+(setenv "PYTHONPATH" "/Users/albertovaldez/.pyenv/shims/python")
+(setq exec-path (append exec-path '("Users/albertovaldez/.pyenv/shims/python")))
+(defun advised-python-shell-make-comint (orig-fun &rest args)
+  (setq args (append '("python3 -q") (cdr args)))
+  (apply orig-fun args))
 
+
+;; C / C++
+
+
+;; PUBLISH
+
+(defun my/org-setup-html ()
+  (setq org-export-with-toc t)
+  (setq org-publish-project-alist
+      '(("my-project-html"
+        :base-directory "."
+        :base-extension "org"
+        :publishing-directory "../public"
+        :publishing-function org-html-publish-to-html
+        :recursive t
+        ;;:makeindex t
+      )
+        ("org-static"
+         :base-directory "."
+         :base-extension "png\\|jpg\\|jpeg\\|gif\\|svg\\|html\\|css\\|js"
+         :publishing-directory "../public"
+         :recursive t
+         :publishing-function org-publish-attachment
+ ))))
+
+(defun my/org-setup-gfm ()
+  (setq org-export-with-toc nil)
+  (setq org-publish-project-alist
+      '(("my-project-gfm"
+        :base-directory "."
+        :base-extension "org"
+        :publishing-directory "../docs"
+        :publishing-function org-gfm-publish-to-gfm
+        :recursive t
+        ;;:makeindex t
+      )
+        ("org-static-gfm"
+         :base-directory "."
+         :base-extension "png\\|jpg\\|jpeg\\|gif\\|svg\\|html\\|css\\|js"
+         :publishing-directory "../docs"
+         :recursive t
+         :publishing-function org-publish-attachment
+))))
+
+(defun my/org-publish-all (force &optional)
+  "Publishes my-project in all formats, pass t to force."
+  (interactive)
+  (run-python)
+  (my/org-setup-gfm)
+  (org-publish-project "my-project-gfm" force)
+  (org-publish-project "org-static-gfm" force)
+  (my/org-setup-html)
+  (org-publish-project "my-project-html" force)
+  (org-publish-project "org-static" force)
+)
 
 ;; DOOM
 (doom! :input
@@ -73,7 +128,7 @@
        ;;hydra
        ;; indent-guides     ; highlighted indent columns
        ;;ligatures         ; ligatures and symbols to make your code pretty again
-       minimap           ; show a map of the code on the side
+       ;;minimap           ; show a map of the code on the side
        modeline          ; snazzy, Atom-inspired modeline, plus API
        ;;nav-flash         ; blink cursor line after big motions
        ;;neotree           ; a project drawer, like NERDTree for vim
@@ -91,7 +146,7 @@
        :editor
        (evil +everywhere); come to the dark side, we have cookies
        file-templates    ; auto-snippets for empty files
-       fold              ; (nigh) universal code folding
+       ;;fold              ; (nigh) universal code folding
        ;;(format +onsave)  ; automated prettiness
        ;;god               ; run Emacs commands without modifier keys
        ;;lispy             ; vim for lisp, for people who don't like vim
@@ -117,8 +172,8 @@
 
        :checkers
        syntax              ; tasing you for every semicolon you forget
-       (spell +hunspell) ; tasing you for misspelling mispelling
-       ;; grammar           ; tasing grammar mistake every you make
+       ;;(spell +hunspell) ; tasing you for misspelling mispelling
+       ;;grammar           ; tasing grammar mistake every you make
 
        :tools
        ;;ansible
@@ -137,11 +192,11 @@
        ;;pass              ; password manager for nerds
        pdf               ; pdf enhancements
        ;;prodigy           ; FIXME managing external services & code builders
-       rgb               ; creating color strings
+       ;;rgb               ; creating color strings
        ;;taskrunner        ; taskrunner for all your projects
        ;;terraform         ; infrastructure as code
        ;;tmux              ; an API for interacting with tmux
-       ;;tree-sitter       ; syntax and parsing, sitting in a tree...
+       tree-sitter       ; syntax and parsing, sitting in a tree...
        ;;upload            ; map local to remote projects via ssh/ftp
 
        :os
@@ -193,7 +248,7 @@
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
-       (python +lsp +pyenv) ; beautiful is better than ugly
+       (python +lsp +pyenv +pyright + poetry) ; beautiful is better than ugly
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        ;;raku              ; the artist formerly known as perl6
@@ -229,4 +284,45 @@
        ;;literate
        (default +bindings +smartparens))
 
+
+
+
+;; https://github.com/emacs-tree-sitter/tree-sitter-langs
+;;/Users/albertovaldez/.emacs.d/.local/straight/repos/elisp-tree-sitter/langs/queries/python
+(face-spec-set 'tree-sitter-hl-face:method\.call '(
+    (t (:inherit tree-sitter-hl-face:function\.call
+        :foreground "#cdcca3"
+        :bold nil))
+    ))
+
+(face-spec-set 'tree-sitter-hl-face:function\.call '(
+    (t (:inherit tree-sitter-hl-face:function\.call
+        :foreground "#cdcca3"
+        :bold nil))
+    ))
+(face-spec-set 'tree-sitter-hl-face:property '(
+    (t (:foreground "#a9dbfa"
+        :bold nil))
+    ))
+(face-spec-set 'tree-sitter-hl-face:label '(
+    (t (:foreground "#a9dbfa"
+        :bold nil))
+    ))
+(face-spec-set 'tree-sitter-hl-face:string '(
+    (t (:foreground "#c5937c"
+        :bold nil))
+    ))
+
+(face-spec-set 'tree-sitter-hl-face:constant '(
+    (t (:foreground "#bacdab"
+        :bold nil))
+    ))
+(face-spec-set 'tree-sitter-hl-face:function.builtin '(
+    (t (:foreground "#cdcca3"
+        :bold nil))
+    ))
+(face-spec-set 'tree-sitter-hl-face:operator '(
+    (t (:foreground "white"
+        :bold nil))
+    ))
 
