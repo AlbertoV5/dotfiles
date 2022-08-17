@@ -9,7 +9,7 @@
 ; (package! visual-fill-column)
 ; (package! exec-path-from-shell)
 (package! ox-gfm)
-(package! rainbow-mode)
+;; (package! rainbow-mode)
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 ;(package! some-package)
 
