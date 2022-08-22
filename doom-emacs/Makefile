@@ -9,7 +9,7 @@ test:
 emacs:
 	brew install --cask emacs
 vterm:
-	brew install libvterm
+	brew install libvterm CMake
 lookup:
 	brew install ripgrep wordnet sqlite
 org:
