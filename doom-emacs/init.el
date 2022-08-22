@@ -28,9 +28,12 @@
 
 ;; Custom org colors
 (custom-theme-set-faces 'user
-                        `(org-level-2 ((t (:foreground "#dcdcaa"))))
-                        `(org-document-title ((t (:foreground "#d4d4d4"))))
-                        `(org-document-info ((t (:foreground "#d4d4d4")))))
+                        `(org-level-1 ((t (:foreground "#c8c8c8" :bold t))))
+                        `(org-level-2 ((t (:foreground "#c8c8c8":bold t))))
+                        `(org-level-3 ((t (:foreground "#c8c8c8":bold t))))
+                        `(org-level-4 ((t (:foreground "#c8c8c8":bold t))))
+                        `(org-document-title ((t (:foreground "#c8c8c8"))))
+                        `(org-document-info ((t (:foreground "#c8c8c8")))))
 ;; DITAA
 (setq org-ditaa-jar-path "/usr/local/Cellar/ditaa/0.11.0_1/libexec/ditaa-0.11.0-standalone.jar")
 (org-babel-do-load-languages

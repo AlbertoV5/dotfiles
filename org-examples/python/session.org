@@ -5,7 +5,6 @@
 #+PROPERTY: header-args:shell :results value org output replace
 #+PROPERTY: header-args:python :results value org output replace :session Python :tangle yes
 
-
 * Python session example
 
 In this example, we will build an entire Python script as a session and then tangle/write it to a file of name of this org file.
@@ -27,7 +26,9 @@ pyvenv.cfg
 
 ** Start a Python session
 
+Enable delimiter colors and start a python session.
 #+begin_src elisp :results silent
+(rainbow-delimiters-mode t)
 (run-python)
 #+end_src
 
@@ -46,16 +47,6 @@ def greet(name: str) -> str:
     return f"Hello {name}."
 
 print(greet("geoff"))
-#+end_src
-
-#+RESULTS:
-#+begin_src org
-[{'point': {'x': 0.0, 'y': 0.0}},
- {'point': {'x': 0.69, 'y': 1.0}},
- {'point': {'x': 1.1, 'y': 1.41}},
- {'point': {'x': 1.39, 'y': 1.73}},
- {'point': {'x': 1.61, 'y': 2.0}}]
-Hello geoff.
 #+end_src
 
 ** Export Python code/Tangle
@@ -77,4 +68,5 @@ python ./session.py
  {'point': {'x': 1.1, 'y': 1.41}},
  {'point': {'x': 1.39, 'y': 1.73}},
  {'point': {'x': 1.61, 'y': 2.0}}]
+Hello geoff.
 #+end_src

@@ -68,7 +68,7 @@ Can be an integer to determine the exact padding."
    (operators      cyan)
    (type           teal)
    (strings        orange-str)
-   (variables      fg)
+   (variables      cyan)
    (numbers        light-green)
    (region         (doom-darken base6 0.5))
    (error          red)
