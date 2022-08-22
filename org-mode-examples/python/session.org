@@ -1,0 +1,80 @@
+#+title:     Python Session test
+#+author:    Alberto Valdez
+#+email:     avq5ac1@gmail.com
+#+PROPERTY: header-args :mkdirp yes :dir . :exports both
+#+PROPERTY: header-args:shell :results value org output replace
+#+PROPERTY: header-args:python :results value org output replace :session Python :tangle yes
+
+
+* Python session example
+
+In this example, we will build an entire Python script as a session and then tangle/write it to a file of name of this org file.
+Make sure to run a Python session with =M-x run-python= and leave it running in the background. That way the source block evaluation uses that interpreter to execute the code.
+
+** Create a virtual environment
+
+#+begin_src shell
+python -m venv ./venv && ls ./venv
+#+end_src
+
+#+RESULTS:
+#+begin_src org
+bin
+include
+lib
+pyvenv.cfg
+#+end_src
+
+** Start a Python session
+
+#+begin_src elisp :results silent
+(run-python)
+#+end_src
+
+** Write the Python code
+
+#+begin_src python
+import math
+from pprint import pprint
+
+x = [round(math.log(i), 2) for i in range(1, 6)]
+y = [round(math.sqrt(i), 2) for i in range(0, 5)]
+kv = [{"point": {"x":xi, "y":yi}} for xi, yi in zip(x, y)]
+pprint(kv)
+
+def greet(name: str) -> str:
+    return f"Hello {name}."
+
+print(greet("geoff"))
+#+end_src
+
+#+RESULTS:
+#+begin_src org
+[{'point': {'x': 0.0, 'y': 0.0}},
+ {'point': {'x': 0.69, 'y': 1.0}},
+ {'point': {'x': 1.1, 'y': 1.41}},
+ {'point': {'x': 1.39, 'y': 1.73}},
+ {'point': {'x': 1.61, 'y': 2.0}}]
+Hello geoff.
+#+end_src
+
+** Export Python code/Tangle
+
+Tangle the code to a python file by executing the elisp function =c-c c-v t=.
+#+begin_src elisp :results silent
+(org-babel-tangle)
+#+end_src
+
+Execute exported python script from the shell.
+#+begin_src shell
+python ./session.py
+#+end_src
+
+#+RESULTS:
+#+begin_src org
+[{'point': {'x': 0.0, 'y': 0.0}},
+ {'point': {'x': 0.69, 'y': 1.0}},
+ {'point': {'x': 1.1, 'y': 1.41}},
+ {'point': {'x': 1.39, 'y': 1.73}},
+ {'point': {'x': 1.61, 'y': 2.0}}]
+#+end_src

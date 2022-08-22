@@ -1,0 +1,45 @@
+#+title:     Artist Mode and ditaa test
+#+author:    Alberto Valdez
+#+email:     avq5ac1@gmail.com
+
+* Artist Mode and ditaa test
+
+Make sure the jar path is correct.
+#+begin_src elisp
+(setq org-ditaa-jar-path "/usr/local/Cellar/ditaa/0.11.0_1/libexec/ditaa-0.11.0-standalone.jar")
+#+end_src
+
+#+RESULTS:
+: /usr/local/Cellar/ditaa/0.11.0_1/libexec/ditaa-0.11.0-standalone.jar
+
+Create a new src block with enough space for the ascii art. Then enter artist-mode and draw manually or with rectangle, etc. Then evaluate the src block with ditaa and file name for this block's desired output.
+
+If using evil-mode, make sure to exit artist-mode before entering visual mode.
+#+begin_src ditaa :file ./backend.png
+Backend
+ +------------------+
+ |                  |     +--------+
+ |      cGRE        |     |cBLU    |
+ |                  |<----|        |
+ |     fast api     |     |  psql  |
+ |                  |---->|        |
+ |                  |     |   {s}  |
+ |                  |     +--------+
+ +------------------+
+#+end_src
+
+#+RESULTS:
+[[file:./backend.png]]
+
+Command line: http://ditaa.sourceforge.net
+
+#+begin_src ditaa :file ./test.png :cmdline -s 0.7 -E --no-shadows
++-----------+
+|cBLU       |
+|    +------+
+|    |  cGRE|
++----+------+
+#+end_src
+
+#+RESULTS:
+[[file:./test.png]]

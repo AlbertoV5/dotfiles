@@ -36,7 +36,8 @@
 ;; (setq doom-theme 'doom-opera-light)
 ;; (setq doom-theme 'doom-dark+)
 ;; (setq doom-theme 'doom-flatwhite)
-(setq doom-theme 'my-doom-dark+)
+(setq doom-theme 'my-doom-dark+
+      doom-font (font-spec :family "Fira Code" :size 16 :weight 'light))
 ;; (setq doom-theme 'doom-one-light)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line

@@ -17,32 +17,31 @@
 (eval-after-load "org"
   '(require 'ox-gfm nil t))
 
-
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (menu-bar-mode -1)
 (set-face-attribute 'default nil :height 150)
 
-(setq default-frame-alist
-      '((width . 104) (height . 56)))
-
-;;(add-to-list 'default-frame-alist '(alpha . (90 . 90)))
+(setq default-frame-alist '((width . 93) (height . 50)))
+;; (add-to-list 'default-frame-alist '(alpha . (90 . 90)))
 (add-to-list 'default-frame-alist '(alpha . (100 . 100)))
 
-(setenv "DICTIONARY" "en_US")
-(setq ispell-dictionary "en_US")
-
+;; Custom org colors
+(custom-theme-set-faces 'user
+                        `(org-level-2 ((t (:foreground "#dcdcaa"))))
+                        `(org-document-title ((t (:foreground "#d4d4d4"))))
+                        `(org-document-info ((t (:foreground "#d4d4d4")))))
+;; DITAA
+(setq org-ditaa-jar-path "/usr/local/Cellar/ditaa/0.11.0_1/libexec/ditaa-0.11.0-standalone.jar")
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((ditaa . t))) ; this line activates ditaa
 
-(setq org-ditaa-jar-path "/usr/local/Cellar/ditaa/0.11.0_1/libexec/ditaa-0.11.0-standalone.jar")
 ;;(setq lsp-ui-doc-enable t)
 ;;(setq lsp-ui-doc-show-with-cursor t)
 ;;(setq lsp-ui-doc-show-with-mouse t)
-
-; (when (memq window-system '(mac ns x))
-;   (exec-path-from-shell-initialize))
+(setenv "DICTIONARY" "en_US")
+(setq ispell-dictionary "en_US")
 
 ;; PYTHON
 (setq python-shell-completion-native-enable nil)

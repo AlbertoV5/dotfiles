@@ -12,7 +12,7 @@ Can be an integer to determine the exact padding."
   :group 'doom-dark+-theme
   :type '(choice integer boolean))
 
-(defcustom doom-dark+-blue-modeline nil
+(defcustom doom-dark+-blue-modeline t
   "If non-nil, mode-line's color will be blue instead of the default purple."
   :group 'doom-dark+-theme
   :type '(choice integer boolean))
@@ -31,7 +31,8 @@ Can be an integer to determine the exact padding."
    (base3      '("#313131" "#3a3a3a" "brightblack"))
    (base4      '("#4b474c" "#444444" "brightblack"))
    (base5      '("#37474F" "#585858" "brightblack"))
-   (base6      '("#237AD3" "#2277DD" "brightblack"))
+   ;; (base6      '("#237AD3" "#2277DD" "brightblack"))
+   (base6      '("#1069ad" "#0c79cc" "brightblack"))
    (base7      '("#777778" "#767676" "brightblack"))
    (base8      '("#f4f4f4" "#a8a8a8" "white"))
    (fg         '("#d4d4d4" "#e4e4e4" "brightwhite"))
@@ -88,12 +89,12 @@ Can be an integer to determine the exact padding."
       (if (integerp doom-dark+-padded-modeline) doom-dark+-padded-modeline 4))))
 
   ;;;; Base theme face overrides
-  ((lazy-highlight :background base4 :foreground fg :distant-foreground fg :weight 'bold)
+  ((lazy-highlight :background base4 :foreground fg :distant-foreground fg :weight 'medium)
    (mode-line
-    :background modeline-bg :foreground modeline-fg
-    :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,modeline-bg)))
-   (mode-line-inactive
     :background modeline-bg-alt :foreground modeline-fg-alt
+    :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,modeline-bg-alt)))
+   (mode-line-inactive
+    :background modeline-bg-alt :foreground modeline-fg
     :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,modeline-bg-alt)))
    (mode-line-emphasis
     :foreground fg
@@ -126,7 +127,7 @@ Can be an integer to determine the exact padding."
    (dired-k-added    :foreground vc-added)
    ;;;; doom-modeline
    (doom-modeline-bar :background (if doom-dark+-blue-modeline base6 dark-violet))
-   (doom-modeline-buffer-file :inherit 'mode-line-emphasis :weight 'bold)
+   (doom-modeline-buffer-file :inherit 'mode-line-emphasis :weight 'medium)
    (doom-modeline-buffer-major-mode :inherit 'doom-modeline-buffer-path)
    (doom-modeline-buffer-modified :inherit 'mode-line-emphasis :weight 'bold)
    (doom-modeline-debug :inherit 'mode-line-emphasis)
@@ -134,9 +135,9 @@ Can be an integer to determine the exact padding."
    (doom-modeline-evil-visual-state :foreground yellow)
    (doom-modeline-info :inherit 'mode-line-emphasis)
    (doom-modeline-lsp-success :inherit 'mode-line-emphasis :weight 'bold)
-   (doom-modeline-persp-name :inherit 'mode-line-emphasis :weight 'bold)
-   (doom-modeline-project-dir :inherit 'mode-line-emphasis :weight 'bold)
-   (doom-modeline-project-parent-dir :inherit 'mode-line-emphasis :weight 'bold)
+   (doom-modeline-persp-name :inherit 'mode-line-emphasis :weight 'medium)
+   (doom-modeline-project-dir :inherit 'mode-line-emphasis :weight 'medium)
+   (doom-modeline-project-parent-dir :inherit 'mode-line-emphasis :weight 'medium)
    (doom-modeline-urgent :inherit 'mode-line-emphasis)
    (doom-modeline-warning :inherit 'mode-line-emphasis)
    ;;;; ivy
@@ -155,9 +156,9 @@ Can be an integer to determine the exact padding."
    (Man-overstrike :inherit 'bold :foreground magenta)
    (Man-underline :inherit 'underline :foreground blue)
    ;;;; org <built-in>
-   ((org-block &override) :background base2)
-   ((org-block-background &override) :background base2)
-   ((org-block-begin-line &override) :background base2)
+   ((org-block &override) :background base1)
+   ((org-block-background &override) :background base1)
+   ((org-block-begin-line &override) :background base1)
    ;;;; org-pomodoro
    (org-pomodoro-mode-line :inherit 'mode-line-emphasis) ; unreadable otherwise
    (org-pomodoro-mode-line-overtime :inherit 'org-pomodoro-mode-line)
