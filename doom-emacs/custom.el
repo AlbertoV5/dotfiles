@@ -3,6 +3,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(org-safe-remote-resources
+   '("\\`https://albertov5\\.github\\.io/org-html-themes/org/theme-readtheorg\\.setup\\'"))
  '(package-selected-packages '(visual-fill-column org-present)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

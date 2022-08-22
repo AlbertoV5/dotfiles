@@ -17,13 +17,14 @@
 (eval-after-load "org"
   '(require 'ox-gfm nil t))
 
+
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (menu-bar-mode -1)
 (set-face-attribute 'default nil :height 150)
 
 (setq default-frame-alist
-      '((width . 69) (height . 42)))
+      '((width . 104) (height . 56)))
 
 ;;(add-to-list 'default-frame-alist '(alpha . (90 . 90)))
 (add-to-list 'default-frame-alist '(alpha . (100 . 100)))
@@ -31,6 +32,11 @@
 (setenv "DICTIONARY" "en_US")
 (setq ispell-dictionary "en_US")
 
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((ditaa . t))) ; this line activates ditaa
+
+(setq org-ditaa-jar-path "/usr/local/Cellar/ditaa/0.11.0_1/libexec/ditaa-0.11.0-standalone.jar")
 ;;(setq lsp-ui-doc-enable t)
 ;;(setq lsp-ui-doc-show-with-cursor t)
 ;;(setq lsp-ui-doc-show-with-mouse t)
@@ -112,7 +118,7 @@
        ;;layout            ; auie,ctsrnm is the superior home row
 
        :completion
-       (company +tng)           ; the ultimate code completion backend
+       (company + tng)           ; the ultimate code completion backend
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        ;;ivy               ; a search engine for love and life
@@ -226,7 +232,7 @@
        ;;fsharp            ; ML stands for Microsoft's Language
        ;;fstar             ; (dependent) types and (monadic) effects and Z3
        ;;gdscript          ; the language you waited for
-       ;;(go +lsp)         ; the hipster dialect
+       (go +lsp)         ; the hipster dialect
        ;;(graphql +lsp)    ; Give queries a REST
        ;;(haskell +lsp)    ; a language that's lazier than I am
        ;;hy                ; readability of scheme w/ speed of python
