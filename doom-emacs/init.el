@@ -33,12 +33,15 @@
                         `(org-level-3 ((t (:foreground "#c8c8c8":bold t))))
                         `(org-level-4 ((t (:foreground "#c8c8c8":bold t))))
                         `(org-document-title ((t (:foreground "#c8c8c8"))))
-                        `(org-document-info ((t (:foreground "#c8c8c8")))))
+                        `(org-document-info ((t (:foreground "#c8c8c8"))))
+                        `(org-todo ((t (:foreground "#bd3737" :bold t))))
+                        )
+
 ;; DITAA
 (setq org-ditaa-jar-path "/usr/local/Cellar/ditaa/0.11.0_1/libexec/ditaa-0.11.0-standalone.jar")
 (org-babel-do-load-languages
  'org-babel-load-languages
- '((ditaa . t))) ; this line activates ditaa
+ '((ditaa . t))) ; this line activates dita
 
 ;;(setq lsp-ui-doc-enable t)
 ;;(setq lsp-ui-doc-show-with-cursor t)
