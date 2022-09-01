@@ -1,10 +1,7 @@
 # -*- mode: org; -*-
-# EXPORT HTML header
-#+SETUPFILE: https://albertov5.github.io/org-html-themes/org/theme-readtheorg.setup
+
 # GENERAL header
-#+PROPERTY: header-args :mkdirp yes :dir . :exports both :noweb strip-export :tangle (concat "tangled/" (org-element-property :name (org-element-context))) :comments link
-# SRC header
-#+PROPERTY: header-args:src
+#+PROPERTY: header-args :mkdirp yes :dir . :exports both :noweb strip-export
 # SHELL header
 #+PROPERTY: header-args:shell :results output :wrap example
 # PYTHON header
@@ -12,10 +9,20 @@
 # C header
 #+PROPERTY: header-args:C :includes <stdlib.h> <stdio.h> <ctype.h> <assert.h> :flags -Wall -Werror -std=gnu99 -g -I . :results output :wrap example :main no
 # SQL header
-#+PROPERTY: header-args:sql :engine postgresql :dbhost localhost :dbuser albertovaldez :database PH-EmployeeDB :results output :wrap example
+#+PROPERTY: header-args:sql :engine postgresql :dbhost localhost :dbuser albertovaldez :database PH-EmployeeDB :results output :wrap export html
 # GO header
 #+PROPERTY: header-args:go :results output :wrap example
 # JAVASCRIPT header
 #+PROPERTY: header-args:js :results output :wrap example
 # ELISP header
 #+PROPERTY: header-args:elisp :wrap example
+
+#+NAME: python_version
+#+begin_src shell :exports none
+python --version
+#+end_src
+
+#+RESULTS: python_version
+#+begin_example
+Python 3.7.13
+#+end_example
