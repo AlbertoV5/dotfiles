@@ -44,6 +44,19 @@
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
 
+;; DEV
+(after! dap-mode
+  (setq dap-python-debugger 'debugpy))
+
+;; KEYBINDS
+;; (map! :leader
+;;       :desc "Treemacs vscode"
+;;       "s-b" #'+treemacs/toggle)
+
+;; VSCode-ish
+(map! "s-b" #'+treemacs/toggle
+      )
+
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 ;;(setq org-directory "~/org/")
