@@ -1,0 +1,242 @@
+#+title: Python Org-mode Wrapper
+#+subtitle: A Python module for post-processing org src block results.
+#+SETUPFILE: ./theme.setup
+#+SETUPFILE: ./header.setup
+
+
+* Introduction
+
+This Python module consist of wrappers for org-mode source blocks that do post-processing on the results in order to format them into HTML or other document types.
+
+This is also a Literate Programming document in which all of the development of the module will be done. This includes tangling the source blocks into the Python files and integrating other Python development tools like Poetry and virtual environments.
+
+The reason to create this Python module is to patch some of the obstacles a Lisp/Elisp neophyte may encounter when starting out in the Emacs world, so they can be a bit productive while learning the proper Emacs-way to do it.
+
+The way the module works is by using the =post= header argument in org-mode to pass a string result from any source block into a Python source block in the same document, which loads one of this module's functions to transform the string into some other format.
+
+Finally, this is can be reproduced with any other language with better HTML and CSS support.
+
+* Describing Use Cases
+
+We are going to discover features, special cases and possible bugs by implementing the module step by step while in this literal document, and we should start by describing standard and not so standard use cases.
+
+** Creating a Basic Table Formatter
+
+Let's use the following string as our default value for our data.
+
+#+NAME: data_default.el
+#+begin_src elisp
+"Column1\tColumn2\ndata1\tdata2\n"
+#+end_src
+
+#+RESULTS: data_default.el
+#+begin_example
+Column1	Column2
+data1	data2
+#+end_example
+
+Now let's create a Python function to convert the output to a table.
+
+#+begin_note
+Because we are running a Python =:session=, we need to make sure we have a background Python process =M-x run-python= in order to run all the source blocks under the same process.
+#+end_note
+
+#+NAME: wrap_table.py
+#+begin_src python :var data = data_default.el() :wrap export html
+from xml.etree.ElementTree import Element, SubElement, dump
+
+def build_row(parent: Element, data: str, tag: str) -> Element:
+    child = SubElement(parent, "tr")
+    for s in data.split("\t"):
+        SubElement(child, tag).text = s
+    return child
+# XML
+def build_html(data: str) -> Element:
+    data = data.split("\n")
+    table = Element("table")
+    build_row(table, data[0], "th")
+    for row in data[1:-1]:
+        build_row(table, row, "td")
+    return table
+
+table = build_html(data)
+dump(table)
+#+end_src
+
+#+RESULTS: wrap_table.py
+#+begin_export html
+<table><tr><th>Column1</th><th>Column2</th></tr><tr><td>data1</td><td>data2</td></tr></table>
+#+end_export
+
+We are post-processing the results of an Elisp block, which is really easy to deal with as a string evaluates to itself, but we can apply the same principle to fairly more complex results.
+
+
+** Case 1: Format C Code
+
+Here is an example where we wrap the results from a C block into an HTML table. We are printing an array as a table to the stdout.
+
+#+NAME: print_table.c
+#+begin_src C :eval no
+void print_table(){
+    // 2x2 board coordinates starting from the top left.
+    size_t area = 4;
+    size_t d = 2;
+    int array[4][2] = {{0,0}, {1, 0},
+                       {0, 1}, {1, 1}};
+    printf("x\ty\n");
+    for (size_t xi = 0; xi < area; xi++){
+        for (size_t yi = 0; yi < d; yi++){
+            printf("%d\t", array[xi][yi]);
+        }
+        printf("\n");
+    }
+}
+#+end_src
+
+#+RESULTS: print_table
+#+begin_example
+#+end_example
+
+And we call it from a regular C source block.
+#+NAME: table.c
+#+begin_src C
+<<print_table.c>>
+int main(){
+    print_table();
+}
+#+end_src
+
+#+RESULTS: table.c
+#+begin_example
+x	y
+0	0
+1	0
+0	1
+1	1
+#+end_example
+
+Now the code with the formatted output.
+
+#+NAME: table2.c
+#+begin_src C :post wrap_table.py(data=*this*) :wrap export html
+<<print_table.c>>
+int main(){
+    print_table();
+}
+#+end_src
+
+#+RESULTS: table2.c
+#+begin_export html
+<table><tr><th>x</th><th>y</th></tr><tr><td>0</td><td>0</td><td /></tr><tr><td>1</td><td>0</td><td /></tr><tr><td>0</td><td>1</td><td /></tr><tr><td>1</td><td>1</td><td /></tr></table>
+#+end_export
+
+
+** TODO Remove extra columns created by tabs.
+
+We get an extra column because of the tabs at the end of the line. Let's make sure we address that in the module.
+
+** Case 2: Format a Database Query
+
+Quering a database without and with the wrapper.
+
+#+NAME: query_titles.sql
+#+begin_src sql :post :wrap example
+SELECT * FROM unique_titles
+LIMIT 5;
+#+end_src
+
+#+RESULTS: query_titles.sql
+#+begin_example
+emp_no	first_name	last_name	title	from_date	to_date
+10001	Georgi	Facello	Senior Engineer	1986-06-26	9999-01-01
+10004	Chirstian	Koblick	Senior Engineer	1995-12-01	9999-01-01
+10005	Kyoichi	Maliniak	Senior Staff	1996-09-12	9999-01-01
+10006	Anneke	Preusig	Senior Engineer	1990-08-05	9999-01-01
+10009	Sumant	Peac	Senior Engineer	1995-02-18	9999-01-01
+#+end_example
+
+#+NAME: query_titles2.sql
+#+begin_src sql :post wrap_table.py(data=*this*)
+SELECT * FROM unique_titles
+LIMIT 5;
+#+end_src
+
+#+RESULTS: query_titles2.sql
+#+begin_export html
+<table><tr><th>emp_no</th><th>first_name</th><th>last_name</th><th>title</th><th>from_date</th><th>to_date</th></tr><tr><td>10001</td><td>Georgi</td><td>Facello</td><td>Senior Engineer</td><td>1986-06-26</td><td>9999-01-01</td></tr><tr><td>10004</td><td>Chirstian</td><td>Koblick</td><td>Senior Engineer</td><td>1995-12-01</td><td>9999-01-01</td></tr><tr><td>10005</td><td>Kyoichi</td><td>Maliniak</td><td>Senior Staff</td><td>1996-09-12</td><td>9999-01-01</td></tr><tr><td>10006</td><td>Anneke</td><td>Preusig</td><td>Senior Engineer</td><td>1990-08-05</td><td>9999-01-01</td></tr><tr><td>10009</td><td>Sumant</td><td>Peac</td><td>Senior Engineer</td><td>1995-02-18</td><td>9999-01-01</td></tr></table>
+#+end_export
+
+
+** Case 3: Format Shell Output
+
+Listing directory contents with no post-processing and then with post-processing enabled.
+
+#+NAME: list_files.sh
+#+begin_src shell
+echo "files" && ls
+#+end_src
+
+#+RESULTS: list_files.sh
+#+begin_example
+files
+__pycache__
+headers.setup
+pow.html
+pow.org
+pow.py
+tangled
+the_best_fare_per_driver.png
+theme-readtheorg-local.setup
+#+end_example
+
+#+NAME: list_files_2.sh
+#+begin_src shell :post wrap_table.py(data=*this*) :wrap export html
+echo "files" && ls
+#+end_src
+
+#+RESULTS: list_files_2.sh
+#+begin_export html
+<table><tr><th>files</th></tr><tr><td>__pycache__</td></tr><tr><td>headers.setup</td></tr><tr><td>pow.html</td></tr><tr><td>pow.org</td></tr><tr><td>pow.py</td></tr><tr><td>tangled</td></tr><tr><td>the_best_fare_per_driver.png</td></tr><tr><td>theme-readtheorg-local.setup</td></tr></table>
+#+end_export
+
+
+* Creating the Module
+
+We can improve the formatting by checking that we don't have a tab =\t= before a new line =\n=. We could also add some sort of column padding for the table in case we have just a couple of columns and want to take advantage of the output style sheet.
+
+** DONE Sanitizing with Regex
+
+We need to clean our data in the case where it includes tabs before the end of line characters.
+
+#+NAME: data_dirty
+#+begin_src elisp
+"Column1\tColumn2\t\ndata1\tdata2\t\n"
+#+end_src
+
+#+RESULTS: data_dirty
+#+begin_example
+Column1	Column2
+data1	data2
+#+end_example
+
+#+NAME: sanitize_str
+#+begin_src python :var data = data_dirty() :wrap export html
+import re
+
+def sanitize_string(data: str) -> str:
+    enc = lambda x: x.encode('utf-8')
+    dec = lambda x: x.decode('utf-8')
+    result = re.sub(enc("(\\t)\\n"), enc("\\n"), enc(data))
+    return dec(result)
+
+data = sanitize_string(data)
+html = build_html(data)
+dump(html)
+#+end_src
+
+#+RESULTS: sanitize_str
+#+begin_export html
+<table><tr><th>Column1</th><th>Column2</th></tr><tr><td>data1</td><td>data2</td></tr></table>
+#+end_export
+
+Our very simple regex will replace all =\t\n= occurrences with a single line break.

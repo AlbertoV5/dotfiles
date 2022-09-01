@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-08-31 Wed 17:33 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Python Org-mode Wrapper</title>
+<meta name="author" content="Alberto Valdez" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="/Users/albertovaldez/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/Users/albertovaldez/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
+<script src="/Users/albertovaldez/org-html-themes/src/lib/js/jquery.min.js"></script>
+<script src="/Users/albertovaldez/org-html-themes/src/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/Users/albertovaldez/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/Users/albertovaldez/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Python Org-mode Wrapper
+<br />
+<span class="subtitle">A Python module for post-processing org src block results.</span>
+</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org17131af">1. Introduction</a></li>
+<li><a href="#org88c5a22">2. Describing Use Cases</a>
+<ul>
+<li><a href="#org8e5f63c">2.1. Creating a Basic Table Formatter</a></li>
+<li><a href="#org80932c4">2.2. Case 1: Format C Code</a></li>
+<li><a href="#orgee693fc">2.3. <span class="todo TODO">TODO</span> Remove extra columns created by tabs.</a></li>
+<li><a href="#org4fc5ce7">2.4. Case 2: Format a Database Query</a></li>
+<li><a href="#orga463bd1">2.5. Case 3: Format Shell Output</a></li>
+</ul>
+</li>
+<li><a href="#orgc8f3074">3. Creating the Module</a>
+<ul>
+<li><a href="#orgf3cbbfa">3.1. <span class="done DONE">DONE</span> Sanitizing with Regex</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-org17131af" class="outline-2">
+<h2 id="org17131af"><span class="section-number-2">1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+This Python module consist of wrappers for org-mode source blocks that do post-processing on the results in order to format them into HTML or other document types.
+</p>
+
+<p>
+This is also a Literate Programming document in which all of the development of the module will be done. This includes tangling the source blocks into the Python files and integrating other Python development tools like Poetry and virtual environments.
+</p>
+
+<p>
+The reason to create this Python module is to patch some of the obstacles a Lisp/Elisp neophyte may encounter when starting out in the Emacs world, so they can be a bit productive while learning the proper Emacs-way to do it.
+</p>
+
+<p>
+The way the module works is by using the <code>post</code> header argument in org-mode to pass a string result from any source block into a Python source block in the same document, which loads one of this module&rsquo;s functions to transform the string into some other format.
+</p>
+
+<p>
+Finally, this is can be reproduced with any other language with better HTML and CSS support.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org88c5a22" class="outline-2">
+<h2 id="org88c5a22"><span class="section-number-2">2.</span> Describing Use Cases</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+We are going to discover features, special cases and possible bugs by implementing the module step by step while in this literal document, and we should start by describing standard and not so standard use cases.
+</p>
+</div>
+
+<div id="outline-container-org8e5f63c" class="outline-3">
+<h3 id="org8e5f63c"><span class="section-number-3">2.1.</span> Creating a Basic Table Formatter</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+Let&rsquo;s use the following string as our default value for our data.
+</p>
+
+<div class="src-name" id="org168c014">
+<p>
+data<sub>default.el</sub>
+</p>
+
+</div>
+<div class="org-src-container">
+<pre class="src src-elisp"><span style="color: #c5937c;">"Column1\tColumn2\ndata1\tdata2\n"</span>
+</pre>
+</div>
+
+<pre class="example" id="org6aed38b">
+Column1	Column2
+data1	data2
+</pre>
+
+<p>
+Now let&rsquo;s create a Python function to convert the output to a table.
+</p>
+
+<div class="note" id="org4953b12">
+<p>
+Because we are running a Python <code>:session</code>, we need to make sure we have a background Python process <code>M-x run-python</code> in order to run all the source blocks under the same process.
+</p>
+
+</div>
+
+<div class="src-name" id="orgb3598de">
+<p>
+wrap<sub>table.py</sub>
+</p>
+
+</div>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #339CDB;">from</span> xml.etree.<span style="color: #35CDAF;">ElementTree</span> <span style="color: #339CDB;">import</span> <span style="color: #35CDAF;">Element</span>, <span style="color: #35CDAF;">SubElement</span>, dump
+
+<span style="color: #339CDB;">def</span> <span style="color: #d9ce96;">build_row</span>(<span style="color: #a9dbfa;">parent</span>: <span style="color: #35CDAF;">Element</span>, <span style="color: #a9dbfa;">data</span>: <span style="color: #35CDAF;">str</span>, <span style="color: #a9dbfa;">tag</span>: <span style="color: #35CDAF;">str</span>) -&gt; <span style="color: #35CDAF;">Element</span>:
+    <span style="color: #a9dbfa;">child</span> <span style="color: #d0d0d0;">=</span> <span style="color: #35CDAF;">SubElement</span>(parent, <span style="color: #c5937c;">"tr"</span>)
+    <span style="color: #339CDB;">for</span> <span style="color: #a9dbfa;">s</span> <span style="color: #339CDB;">in</span> data.<span style="color: #d9ce96;">split</span>(<span style="color: #c5937c;">"</span><span style="color: #339CDB;">\t</span><span style="color: #c5937c;">"</span>):
+        <span style="color: #35CDAF;">SubElement</span>(child, tag).<span style="color: #a9dbfa;">text</span> <span style="color: #d0d0d0;">=</span> s
+    <span style="color: #339CDB;">return</span> child
+<span style="color: #579C4C;"># XML</span>
+<span style="color: #339CDB;">def</span> <span style="color: #d9ce96;">build_html</span>(<span style="color: #a9dbfa;">data</span>: <span style="color: #35CDAF;">str</span>) -&gt; <span style="color: #35CDAF;">Element</span>:
+    <span style="color: #a9dbfa;">data</span> <span style="color: #d0d0d0;">=</span> data.<span style="color: #d9ce96;">split</span>(<span style="color: #c5937c;">"</span><span style="color: #339CDB;">\n</span><span style="color: #c5937c;">"</span>)
+    <span style="color: #a9dbfa;">table</span> <span style="color: #d0d0d0;">=</span> <span style="color: #35CDAF;">Element</span>(<span style="color: #c5937c;">"table"</span>)
+    <span style="color: #d9ce96;">build_row</span>(table, data[<span style="color: #BBCCAA;">0</span>], <span style="color: #c5937c;">"th"</span>)
+    <span style="color: #339CDB;">for</span> <span style="color: #a9dbfa;">row</span> <span style="color: #339CDB;">in</span> data[<span style="color: #BBCCAA;">1</span>:<span style="color: #d0d0d0;">-</span><span style="color: #BBCCAA;">1</span>]:
+        <span style="color: #d9ce96;">build_row</span>(table, row, <span style="color: #c5937c;">"td"</span>)
+    <span style="color: #339CDB;">return</span> table
+
+<span style="color: #a9dbfa;">table</span> <span style="color: #d0d0d0;">=</span> <span style="color: #d9ce96;">build_html</span>(data)
+<span style="color: #d9ce96;">dump</span>(table)
+</pre>
+</div>
+
+<table><tr><th>Column1</th><th>Column2</th></tr><tr><td>data1</td><td>data2</td></tr></table>
+
+<p>
+We are post-processing the results of an Elisp block, which is really easy to deal with as a string evaluates to itself, but we can apply the same principle to fairly more complex results.
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-org80932c4" class="outline-3">
+<h3 id="org80932c4"><span class="section-number-3">2.2.</span> Case 1: Format C Code</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+Here is an example where we wrap the results from a C block into an HTML table. We are printing an array as a table to the stdout.
+</p>
+
+<div class="src-name" id="org0990873">
+<p>
+print<sub>table.c</sub>
+</p>
+
+</div>
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #35CDAF;">void</span> <span style="color: #d9ce96;">print_table</span><span style="color: #C586C0; background-color: #252525;">(){</span>
+    <span style="color: #579C4C;">// 2x2 board coordinates starting from the top left.</span>
+    <span style="color: #35CDAF;">size_t</span> <span style="color: #a9dbfa;">area</span> <span style="color: #d0d0d0;">=</span> <span style="color: #BBCCAA;">4</span><span style="color: #d0d0d0; background-color: #252525;">;</span>
+    <span style="color: #35CDAF;">size_t</span> <span style="color: #a9dbfa;">d</span> <span style="color: #d0d0d0;">=</span> <span style="color: #BBCCAA;">2</span><span style="color: #d0d0d0; background-color: #252525;">;</span>
+    <span style="color: #35CDAF;">int</span> array<span style="color: #DB8E73; background-color: #252525;">[</span><span style="color: #BBCCAA;">4</span><span style="color: #DB8E73; background-color: #252525;">][</span><span style="color: #BBCCAA;">2</span><span style="color: #DB8E73; background-color: #252525;">]</span> <span style="color: #d0d0d0;">=</span> <span style="color: #DB8E73; background-color: #252525;">{</span><span style="color: #579C4C; background-color: #252525;">{</span><span style="color: #BBCCAA;">0</span><span style="color: #d0d0d0; background-color: #252525;">,</span><span style="color: #BBCCAA;">0</span><span style="color: #579C4C; background-color: #252525;">}</span><span style="color: #d0d0d0; background-color: #252525;">,</span> <span style="color: #579C4C; background-color: #252525;">{</span><span style="color: #BBCCAA;">1</span><span style="color: #d0d0d0; background-color: #252525;">,</span> <span style="color: #BBCCAA;">0</span><span style="color: #579C4C; background-color: #252525;">}</span><span style="color: #d0d0d0; background-color: #252525;">,</span>
+                       <span style="color: #579C4C; background-color: #252525;">{</span><span style="color: #BBCCAA;">0</span><span style="color: #d0d0d0; background-color: #252525;">,</span> <span style="color: #BBCCAA;">1</span><span style="color: #579C4C; background-color: #252525;">}</span><span style="color: #d0d0d0; background-color: #252525;">,</span> <span style="color: #579C4C; background-color: #252525;">{</span><span style="color: #BBCCAA;">1</span><span style="color: #d0d0d0; background-color: #252525;">,</span> <span style="color: #BBCCAA;">1</span><span style="color: #579C4C; background-color: #252525;">}</span><span style="color: #DB8E73; background-color: #252525;">}</span><span style="color: #d0d0d0; background-color: #252525;">;</span>
+    <span style="color: #d9ce96;">printf</span><span style="color: #DB8E73; background-color: #252525;">(</span><span style="color: #c5937c;">"x\ty\n"</span><span style="color: #DB8E73; background-color: #252525;">)</span><span style="color: #d0d0d0; background-color: #252525;">;</span>
+    <span style="color: #339CDB;">for</span> <span style="color: #DB8E73; background-color: #252525;">(</span><span style="color: #35CDAF;">size_t</span> <span style="color: #a9dbfa;">xi</span> <span style="color: #d0d0d0;">=</span> <span style="color: #BBCCAA;">0</span><span style="color: #d0d0d0; background-color: #252525;">;</span> xi <span style="color: #d0d0d0;">&lt;</span> area<span style="color: #d0d0d0; background-color: #252525;">;</span> <span style="color: #a9dbfa;">xi</span><span style="color: #d0d0d0;">++</span><span style="color: #DB8E73; background-color: #252525;">){</span>
+        <span style="color: #339CDB;">for</span> <span style="color: #579C4C; background-color: #252525;">(</span><span style="color: #35CDAF;">size_t</span> <span style="color: #a9dbfa;">yi</span> <span style="color: #d0d0d0;">=</span> <span style="color: #BBCCAA;">0</span><span style="color: #d0d0d0; background-color: #252525;">;</span> yi <span style="color: #d0d0d0;">&lt;</span> d<span style="color: #d0d0d0; background-color: #252525;">;</span> <span style="color: #a9dbfa;">yi</span><span style="color: #d0d0d0;">++</span><span style="color: #579C4C; background-color: #252525;">){</span>
+            <span style="color: #d9ce96;">printf</span><span style="color: #a9dbfa; background-color: #252525;">(</span><span style="color: #c5937c;">"%d\t"</span><span style="color: #d0d0d0; background-color: #252525;">,</span> array<span style="color: #C586C0; background-color: #252525;">[</span>xi<span style="color: #C586C0; background-color: #252525;">][</span>yi<span style="color: #C586C0; background-color: #252525;">]</span><span style="color: #a9dbfa; background-color: #252525;">)</span><span style="color: #d0d0d0; background-color: #252525;">;</span>
+        <span style="color: #579C4C; background-color: #252525;">}</span>
+        <span style="color: #d9ce96;">printf</span><span style="color: #579C4C; background-color: #252525;">(</span><span style="color: #c5937c;">"\n"</span><span style="color: #579C4C; background-color: #252525;">)</span><span style="color: #d0d0d0; background-color: #252525;">;</span>
+    <span style="color: #DB8E73; background-color: #252525;">}</span>
+<span style="color: #C586C0; background-color: #252525;">}</span>
+</pre>
+</div>
+
+<pre class="example" id="orga5afdab">
+
+</pre>
+
+<p>
+And we call it from a regular C source block.
+</p>
+<div class="src-name" id="org36be6dc">
+<p>
+table.c
+</p>
+
+</div>
+<div class="org-src-container">
+<pre class="src src-C">
+<span style="color: #35CDAF;">int</span> <span style="color: #d9ce96;">main</span><span style="color: #C586C0; background-color: #252525;">(){</span>
+    <span style="color: #d9ce96;">print_table</span><span style="color: #DB8E73; background-color: #252525;">()</span><span style="color: #d0d0d0; background-color: #252525;">;</span>
+<span style="color: #C586C0; background-color: #252525;">}</span>
+</pre>
+</div>
+
+<pre class="example" id="orge90ccea">
+x	y
+0	0	
+1	0	
+0	1	
+1	1	
+</pre>
+
+<p>
+Now the code with the formatted output.
+</p>
+
+<div class="src-name" id="orgbb85f87">
+<p>
+table2.c
+</p>
+
+</div>
+<div class="org-src-container">
+<pre class="src src-C">
+<span style="color: #35CDAF;">int</span> <span style="color: #d9ce96;">main</span><span style="color: #C586C0; background-color: #252525;">(){</span>
+    <span style="color: #d9ce96;">print_table</span><span style="color: #DB8E73; background-color: #252525;">()</span><span style="color: #d0d0d0; background-color: #252525;">;</span>
+<span style="color: #C586C0; background-color: #252525;">}</span>
+</pre>
+</div>
+
+<table><tr><th>x</th><th>y</th></tr><tr><td>0</td><td>0</td><td /></tr><tr><td>1</td><td>0</td><td /></tr><tr><td>0</td><td>1</td><td /></tr><tr><td>1</td><td>1</td><td /></tr></table>
+</div>
+</div>
+
+
+<div id="outline-container-orgee693fc" class="outline-3">
+<h3 id="orgee693fc"><span class="section-number-3">2.3.</span> <span class="todo TODO">TODO</span> Remove extra columns created by tabs.</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+We get an extra column because of the tabs at the end of the line. Let&rsquo;s make sure we address that in the module.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org4fc5ce7" class="outline-3">
+<h3 id="org4fc5ce7"><span class="section-number-3">2.4.</span> Case 2: Format a Database Query</h3>
+<div class="outline-text-3" id="text-2-4">
+<p>
+Quering a database without and with the wrapper.
+</p>
+
+<div class="src-name" id="org1ae9be4">
+<p>
+query<sub>titles.sql</sub>
+</p>
+
+</div>
+<div class="org-src-container">
+<pre class="src src-sql"><span style="color: #339CDB;">SELECT</span> * <span style="color: #339CDB;">FROM</span> unique_titles
+<span style="color: #339CDB;">LIMIT</span> <span style="color: #B5CEA8; font-weight: bold;">5</span>;
+</pre>
+</div>
+
+<pre class="example" id="org0fec438">
+emp_no	first_name	last_name	title	from_date	to_date
+10001	Georgi	Facello	Senior Engineer	1986-06-26	9999-01-01
+10004	Chirstian	Koblick	Senior Engineer	1995-12-01	9999-01-01
+10005	Kyoichi	Maliniak	Senior Staff	1996-09-12	9999-01-01
+10006	Anneke	Preusig	Senior Engineer	1990-08-05	9999-01-01
+10009	Sumant	Peac	Senior Engineer	1995-02-18	9999-01-01
+</pre>
+
+<div class="src-name" id="org591e4fb">
+<p>
+query<sub>titles2.sql</sub>
+</p>
+
+</div>
+<div class="org-src-container">
+<pre class="src src-sql"><span style="color: #339CDB;">SELECT</span> * <span style="color: #339CDB;">FROM</span> unique_titles
+<span style="color: #339CDB;">LIMIT</span> <span style="color: #B5CEA8; font-weight: bold;">5</span>;
+</pre>
+</div>
+
+<table><tr><th>emp_no</th><th>first_name</th><th>last_name</th><th>title</th><th>from_date</th><th>to_date</th></tr><tr><td>10001</td><td>Georgi</td><td>Facello</td><td>Senior Engineer</td><td>1986-06-26</td><td>9999-01-01</td></tr><tr><td>10004</td><td>Chirstian</td><td>Koblick</td><td>Senior Engineer</td><td>1995-12-01</td><td>9999-01-01</td></tr><tr><td>10005</td><td>Kyoichi</td><td>Maliniak</td><td>Senior Staff</td><td>1996-09-12</td><td>9999-01-01</td></tr><tr><td>10006</td><td>Anneke</td><td>Preusig</td><td>Senior Engineer</td><td>1990-08-05</td><td>9999-01-01</td></tr><tr><td>10009</td><td>Sumant</td><td>Peac</td><td>Senior Engineer</td><td>1995-02-18</td><td>9999-01-01</td></tr></table>
+</div>
+</div>
+
+
+<div id="outline-container-orga463bd1" class="outline-3">
+<h3 id="orga463bd1"><span class="section-number-3">2.5.</span> Case 3: Format Shell Output</h3>
+<div class="outline-text-3" id="text-2-5">
+<p>
+Listing directory contents with no post-processing and then with post-processing enabled.
+</p>
+
+<div class="src-name" id="orgc3ff9cf">
+<p>
+list<sub>files.sh</sub>
+</p>
+
+</div>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #C586C0;">echo</span> <span style="color: #c5937c;">"files"</span> <span style="color: #d0d0d0;">&amp;&amp;</span> <span style="color: #d9ce96;">ls</span>
+</pre>
+</div>
+
+<pre class="example" id="org7d3d867">
+files
+__pycache__
+headers.setup
+pow.html
+pow.org
+pow.py
+tangled
+the_best_fare_per_driver.png
+theme-readtheorg-local.setup
+</pre>
+
+<div class="src-name" id="org408a8a3">
+<p>
+list<sub>files</sub><sub>2.sh</sub>
+</p>
+
+</div>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #C586C0;">echo</span> <span style="color: #c5937c;">"files"</span> <span style="color: #d0d0d0;">&amp;&amp;</span> <span style="color: #d9ce96;">ls</span>
+</pre>
+</div>
+
+<table><tr><th>files</th></tr><tr><td>__pycache__</td></tr><tr><td>headers.setup</td></tr><tr><td>pow.html</td></tr><tr><td>pow.org</td></tr><tr><td>pow.py</td></tr><tr><td>tangled</td></tr><tr><td>the_best_fare_per_driver.png</td></tr><tr><td>theme-readtheorg-local.setup</td></tr></table>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgc8f3074" class="outline-2">
+<h2 id="orgc8f3074"><span class="section-number-2">3.</span> Creating the Module</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+We can improve the formatting by checking that we don&rsquo;t have a tab <code>\t</code> before a new line <code>\n</code>. We could also add some sort of column padding for the table in case we have just a couple of columns and want to take advantage of the output style sheet.
+</p>
+</div>
+
+<div id="outline-container-orgf3cbbfa" class="outline-3">
+<h3 id="orgf3cbbfa"><span class="section-number-3">3.1.</span> <span class="done DONE">DONE</span> Sanitizing with Regex</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+We need to clean our data in the case where it includes tabs before the end of line characters.
+</p>
+
+<div class="src-name" id="org1236d44">
+<p>
+data<sub>dirty</sub>
+</p>
+
+</div>
+<div class="org-src-container">
+<pre class="src src-elisp"><span style="color: #c5937c;">"Column1\tColumn2\t\ndata1\tdata2\t\n"</span>
+</pre>
+</div>
+
+<pre class="example" id="orge7f9a2f">
+Column1	Column2	
+data1	data2	
+</pre>
+
+<div class="src-name" id="org733ae23">
+<p>
+sanitize<sub>str</sub>
+</p>
+
+</div>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #339CDB;">import</span> re
+
+<span style="color: #339CDB;">def</span> <span style="color: #d9ce96;">sanitize_string</span>(<span style="color: #a9dbfa;">data</span>: <span style="color: #35CDAF;">str</span>) -&gt; <span style="color: #35CDAF;">str</span>:
+    <span style="color: #a9dbfa;">enc</span> <span style="color: #d0d0d0;">=</span> <span style="color: #339CDB;">lambda</span> <span style="color: #a9dbfa;">x</span>: x.<span style="color: #d9ce96;">encode</span>(<span style="color: #c5937c;">'utf-8'</span>)
+    <span style="color: #a9dbfa;">dec</span> <span style="color: #d0d0d0;">=</span> <span style="color: #339CDB;">lambda</span> <span style="color: #a9dbfa;">x</span>: x.<span style="color: #d9ce96;">decode</span>(<span style="color: #c5937c;">'utf-8'</span>)
+    <span style="color: #a9dbfa;">result</span> <span style="color: #d0d0d0;">=</span> re.<span style="color: #d9ce96;">sub</span>(<span style="color: #d9ce96;">enc</span>(<span style="color: #c5937c;">"(</span><span style="color: #339CDB;">\\</span><span style="color: #c5937c;">t)</span><span style="color: #339CDB;">\\</span><span style="color: #c5937c;">n"</span>), <span style="color: #d9ce96;">enc</span>(<span style="color: #c5937c;">"</span><span style="color: #339CDB;">\\</span><span style="color: #c5937c;">n"</span>), <span style="color: #d9ce96;">enc</span>(data))
+    <span style="color: #339CDB;">return</span> <span style="color: #d9ce96;">dec</span>(result)
+
+<span style="color: #a9dbfa;">data</span> <span style="color: #d0d0d0;">=</span> <span style="color: #d9ce96;">sanitize_string</span>(data)
+<span style="color: #a9dbfa;">html</span> <span style="color: #d0d0d0;">=</span> <span style="color: #d9ce96;">build_html</span>(data)
+<span style="color: #d9ce96;">dump</span>(html)
+</pre>
+</div>
+
+<table><tr><th>Column1</th><th>Column2</th></tr><tr><td>data1</td><td>data2</td></tr></table>
+
+<p>
+Our very simple regex will replace all <code>\t\n</code> occurrences with a single line break.
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Alberto Valdez</p>
+<p class="date">Created: 2022-08-31 Wed 17:33</p>
+</div>
+</body>
+</html>
