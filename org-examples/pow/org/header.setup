@@ -17,7 +17,7 @@
 #+PROPERTY: header-args:C :includes <stdlib.h> <stdio.h> <ctype.h> <assert.h> :flags -Wall -Werror -std=gnu99 -g -I . :main no
 
 #+NAME: module/name.el
-#+begin_src elisp
+#+begin_src elisp :exports none
 (setq src "../src/")
 (concat src (org-element-property :name (org-element-context)))
 #+end_src
