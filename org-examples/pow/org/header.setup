@@ -1,6 +1,6 @@
 # -*- mode: org; -*-
 # GENERAL header
-#+PROPERTY: header-args :dir .. :mkdirp yes :exports both :noweb strip-export :tangle (concat "../src/"  (org-element-property :src (org-element-context)) (org-element-property :name (org-element-context))) :comments link :results output replace :wrap example
+#+PROPERTY: header-args :dir .. :mkdirp yes :exports both :noweb strip-export :tangle (concat "../src/" (org-element-property :name (org-element-context))) :comments link :results output replace :wrap example
 # SHELL header
 #+PROPERTY: header-args:shell
 # JAVASCRIPT header
