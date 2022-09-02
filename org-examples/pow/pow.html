@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-08-31 Wed 17:33 -->
+<!-- 2022-09-02 Fri 01:50 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Python Org-mode Wrapper</title>
@@ -26,28 +26,27 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org17131af">1. Introduction</a></li>
-<li><a href="#org88c5a22">2. Describing Use Cases</a>
+<li><a href="#org7d5d75b">1. Introduction</a></li>
+<li><a href="#org4c7ddf5">2. Describing Use Cases</a>
 <ul>
-<li><a href="#org8e5f63c">2.1. Creating a Basic Table Formatter</a></li>
-<li><a href="#org80932c4">2.2. Case 1: Format C Code</a></li>
-<li><a href="#orgee693fc">2.3. <span class="todo TODO">TODO</span> Remove extra columns created by tabs.</a></li>
-<li><a href="#org4fc5ce7">2.4. Case 2: Format a Database Query</a></li>
-<li><a href="#orga463bd1">2.5. Case 3: Format Shell Output</a></li>
+<li><a href="#org852dd95">2.1. Creating a Basic Table Formatter</a></li>
+<li><a href="#org555ee57">2.2. Case 1: Format C Code</a></li>
+<li><a href="#org103381e">2.3. <span class="todo TODO">TODO</span> Remove extra columns created by tabs.</a></li>
+<li><a href="#org7d33fcf">2.4. Case 2: Format a Database Query</a></li>
+<li><a href="#orgb0ee481">2.5. Case 3: Format Shell Output</a></li>
 </ul>
 </li>
-<li><a href="#orgc8f3074">3. Creating the Module</a>
+<li><a href="#org15374c6">3. Creating the Module</a>
 <ul>
-<li><a href="#orgf3cbbfa">3.1. <span class="done DONE">DONE</span> Sanitizing with Regex</a></li>
+<li><a href="#org804f721">3.1. <span class="done DONE">DONE</span> Sanitizing with Regex</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-
-<div id="outline-container-org17131af" class="outline-2">
-<h2 id="org17131af"><span class="section-number-2">1.</span> Introduction</h2>
+<div id="outline-container-org7d5d75b" class="outline-2">
+<h2 id="org7d5d75b"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 This Python module consist of wrappers for org-mode source blocks that do post-processing on the results in order to format them into HTML or other document types.
@@ -71,22 +70,22 @@ Finally, this is can be reproduced with any other language with better HTML and 
 </div>
 </div>
 
-<div id="outline-container-org88c5a22" class="outline-2">
-<h2 id="org88c5a22"><span class="section-number-2">2.</span> Describing Use Cases</h2>
+<div id="outline-container-org4c7ddf5" class="outline-2">
+<h2 id="org4c7ddf5"><span class="section-number-2">2.</span> Describing Use Cases</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 We are going to discover features, special cases and possible bugs by implementing the module step by step while in this literal document, and we should start by describing standard and not so standard use cases.
 </p>
 </div>
 
-<div id="outline-container-org8e5f63c" class="outline-3">
-<h3 id="org8e5f63c"><span class="section-number-3">2.1.</span> Creating a Basic Table Formatter</h3>
+<div id="outline-container-org852dd95" class="outline-3">
+<h3 id="org852dd95"><span class="section-number-3">2.1.</span> Creating a Basic Table Formatter</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 Let&rsquo;s use the following string as our default value for our data.
 </p>
 
-<div class="src-name" id="org168c014">
+<div class="src-name" id="orgd85793a">
 <p>
 data<sub>default.el</sub>
 </p>
@@ -97,7 +96,7 @@ data<sub>default.el</sub>
 </pre>
 </div>
 
-<pre class="example" id="org6aed38b">
+<pre class="example" id="orge97c4f3">
 Column1	Column2
 data1	data2
 </pre>
@@ -106,14 +105,14 @@ data1	data2
 Now let&rsquo;s create a Python function to convert the output to a table.
 </p>
 
-<div class="note" id="org4953b12">
+<div class="note" id="org60cdba9">
 <p>
 Because we are running a Python <code>:session</code>, we need to make sure we have a background Python process <code>M-x run-python</code> in order to run all the source blocks under the same process.
 </p>
 
 </div>
 
-<div class="src-name" id="orgb3598de">
+<div class="src-name" id="orgc7f53d4">
 <p>
 wrap<sub>table.py</sub>
 </p>
@@ -129,10 +128,10 @@ wrap<sub>table.py</sub>
     <span style="color: #339CDB;">return</span> child
 <span style="color: #579C4C;"># XML</span>
 <span style="color: #339CDB;">def</span> <span style="color: #d9ce96;">build_html</span>(<span style="color: #a9dbfa;">data</span>: <span style="color: #35CDAF;">str</span>) -&gt; <span style="color: #35CDAF;">Element</span>:
-    <span style="color: #a9dbfa;">data</span> <span style="color: #d0d0d0;">=</span> data.<span style="color: #d9ce96;">split</span>(<span style="color: #c5937c;">"</span><span style="color: #339CDB;">\n</span><span style="color: #c5937c;">"</span>)
+    <span style="color: #a9dbfa;">data_list</span> <span style="color: #d0d0d0;">=</span> data.<span style="color: #d9ce96;">split</span>(<span style="color: #c5937c;">"</span><span style="color: #339CDB;">\n</span><span style="color: #c5937c;">"</span>)
     <span style="color: #a9dbfa;">table</span> <span style="color: #d0d0d0;">=</span> <span style="color: #35CDAF;">Element</span>(<span style="color: #c5937c;">"table"</span>)
-    <span style="color: #d9ce96;">build_row</span>(table, data[<span style="color: #BBCCAA;">0</span>], <span style="color: #c5937c;">"th"</span>)
-    <span style="color: #339CDB;">for</span> <span style="color: #a9dbfa;">row</span> <span style="color: #339CDB;">in</span> data[<span style="color: #BBCCAA;">1</span>:<span style="color: #d0d0d0;">-</span><span style="color: #BBCCAA;">1</span>]:
+    <span style="color: #d9ce96;">build_row</span>(table, data_list[<span style="color: #BBCCAA;">0</span>], <span style="color: #c5937c;">"th"</span>)
+    <span style="color: #339CDB;">for</span> <span style="color: #a9dbfa;">row</span> <span style="color: #339CDB;">in</span> data_list[<span style="color: #BBCCAA;">1</span>:<span style="color: #d0d0d0;">-</span><span style="color: #BBCCAA;">1</span>]:
         <span style="color: #d9ce96;">build_row</span>(table, row, <span style="color: #c5937c;">"td"</span>)
     <span style="color: #339CDB;">return</span> table
 
@@ -149,15 +148,14 @@ We are post-processing the results of an Elisp block, which is really easy to de
 </div>
 </div>
 
-
-<div id="outline-container-org80932c4" class="outline-3">
-<h3 id="org80932c4"><span class="section-number-3">2.2.</span> Case 1: Format C Code</h3>
+<div id="outline-container-org555ee57" class="outline-3">
+<h3 id="org555ee57"><span class="section-number-3">2.2.</span> Case 1: Format C Code</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 Here is an example where we wrap the results from a C block into an HTML table. We are printing an array as a table to the stdout.
 </p>
 
-<div class="src-name" id="org0990873">
+<div class="src-name" id="orge5eaab0">
 <p>
 print<sub>table.c</sub>
 </p>
@@ -181,14 +179,14 @@ print<sub>table.c</sub>
 </pre>
 </div>
 
-<pre class="example" id="orga5afdab">
+<pre class="example" id="org2a15e0f">
 
 </pre>
 
 <p>
 And we call it from a regular C source block.
 </p>
-<div class="src-name" id="org36be6dc">
+<div class="src-name" id="orgcf7d183">
 <p>
 table.c
 </p>
@@ -202,7 +200,7 @@ table.c
 </pre>
 </div>
 
-<pre class="example" id="orge90ccea">
+<pre class="example" id="org4e9e57f">
 x	y
 0	0	
 1	0	
@@ -214,7 +212,7 @@ x	y
 Now the code with the formatted output.
 </p>
 
-<div class="src-name" id="orgbb85f87">
+<div class="src-name" id="org90a999d">
 <p>
 table2.c
 </p>
@@ -233,8 +231,8 @@ table2.c
 </div>
 
 
-<div id="outline-container-orgee693fc" class="outline-3">
-<h3 id="orgee693fc"><span class="section-number-3">2.3.</span> <span class="todo TODO">TODO</span> Remove extra columns created by tabs.</h3>
+<div id="outline-container-org103381e" class="outline-3">
+<h3 id="org103381e"><span class="section-number-3">2.3.</span> <span class="todo TODO">TODO</span> Remove extra columns created by tabs.</h3>
 <div class="outline-text-3" id="text-2-3">
 <p>
 We get an extra column because of the tabs at the end of the line. Let&rsquo;s make sure we address that in the module.
@@ -242,14 +240,14 @@ We get an extra column because of the tabs at the end of the line. Let&rsquo;s m
 </div>
 </div>
 
-<div id="outline-container-org4fc5ce7" class="outline-3">
-<h3 id="org4fc5ce7"><span class="section-number-3">2.4.</span> Case 2: Format a Database Query</h3>
+<div id="outline-container-org7d33fcf" class="outline-3">
+<h3 id="org7d33fcf"><span class="section-number-3">2.4.</span> Case 2: Format a Database Query</h3>
 <div class="outline-text-3" id="text-2-4">
 <p>
 Quering a database without and with the wrapper.
 </p>
 
-<div class="src-name" id="org1ae9be4">
+<div class="src-name" id="org7bcabd1">
 <p>
 query<sub>titles.sql</sub>
 </p>
@@ -261,7 +259,7 @@ query<sub>titles.sql</sub>
 </pre>
 </div>
 
-<pre class="example" id="org0fec438">
+<pre class="example" id="orgab0785e">
 emp_no	first_name	last_name	title	from_date	to_date
 10001	Georgi	Facello	Senior Engineer	1986-06-26	9999-01-01
 10004	Chirstian	Koblick	Senior Engineer	1995-12-01	9999-01-01
@@ -270,7 +268,7 @@ emp_no	first_name	last_name	title	from_date	to_date
 10009	Sumant	Peac	Senior Engineer	1995-02-18	9999-01-01
 </pre>
 
-<div class="src-name" id="org591e4fb">
+<div class="src-name" id="orgc040d14">
 <p>
 query<sub>titles2.sql</sub>
 </p>
@@ -287,14 +285,14 @@ query<sub>titles2.sql</sub>
 </div>
 
 
-<div id="outline-container-orga463bd1" class="outline-3">
-<h3 id="orga463bd1"><span class="section-number-3">2.5.</span> Case 3: Format Shell Output</h3>
+<div id="outline-container-orgb0ee481" class="outline-3">
+<h3 id="orgb0ee481"><span class="section-number-3">2.5.</span> Case 3: Format Shell Output</h3>
 <div class="outline-text-3" id="text-2-5">
 <p>
 Listing directory contents with no post-processing and then with post-processing enabled.
 </p>
 
-<div class="src-name" id="orgc3ff9cf">
+<div class="src-name" id="org8c81b9d">
 <p>
 list<sub>files.sh</sub>
 </p>
@@ -305,19 +303,21 @@ list<sub>files.sh</sub>
 </pre>
 </div>
 
-<pre class="example" id="org7d3d867">
+<pre class="example" id="org796d1a9">
 files
-__pycache__
-headers.setup
+(concat "src
+(concat "tangled
+best_fare_price.png
+header.setup
 pow.html
 pow.org
-pow.py
+src
 tangled
-the_best_fare_per_driver.png
-theme-readtheorg-local.setup
+temp.org
+theme.setup
 </pre>
 
-<div class="src-name" id="org408a8a3">
+<div class="src-name" id="orgd765df2">
 <p>
 list<sub>files</sub><sub>2.sh</sub>
 </p>
@@ -328,28 +328,28 @@ list<sub>files</sub><sub>2.sh</sub>
 </pre>
 </div>
 
-<table><tr><th>files</th></tr><tr><td>__pycache__</td></tr><tr><td>headers.setup</td></tr><tr><td>pow.html</td></tr><tr><td>pow.org</td></tr><tr><td>pow.py</td></tr><tr><td>tangled</td></tr><tr><td>the_best_fare_per_driver.png</td></tr><tr><td>theme-readtheorg-local.setup</td></tr></table>
+<table><tr><th>files</th></tr><tr><td>(concat "src</td></tr><tr><td>(concat "tangled</td></tr><tr><td>best_fare_price.png</td></tr><tr><td>header.setup</td></tr><tr><td>pow.html</td></tr><tr><td>pow.org</td></tr><tr><td>src</td></tr><tr><td>tangled</td></tr><tr><td>temp.org</td></tr><tr><td>theme.setup</td></tr></table>
 </div>
 </div>
 </div>
 
 
-<div id="outline-container-orgc8f3074" class="outline-2">
-<h2 id="orgc8f3074"><span class="section-number-2">3.</span> Creating the Module</h2>
+<div id="outline-container-org15374c6" class="outline-2">
+<h2 id="org15374c6"><span class="section-number-2">3.</span> Creating the Module</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 We can improve the formatting by checking that we don&rsquo;t have a tab <code>\t</code> before a new line <code>\n</code>. We could also add some sort of column padding for the table in case we have just a couple of columns and want to take advantage of the output style sheet.
 </p>
 </div>
 
-<div id="outline-container-orgf3cbbfa" class="outline-3">
-<h3 id="orgf3cbbfa"><span class="section-number-3">3.1.</span> <span class="done DONE">DONE</span> Sanitizing with Regex</h3>
+<div id="outline-container-org804f721" class="outline-3">
+<h3 id="org804f721"><span class="section-number-3">3.1.</span> <span class="done DONE">DONE</span> Sanitizing with Regex</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 We need to clean our data in the case where it includes tabs before the end of line characters.
 </p>
 
-<div class="src-name" id="org1236d44">
+<div class="src-name" id="org900f195">
 <p>
 data<sub>dirty</sub>
 </p>
@@ -360,12 +360,12 @@ data<sub>dirty</sub>
 </pre>
 </div>
 
-<pre class="example" id="orge7f9a2f">
+<pre class="example" id="org9be91d6">
 Column1	Column2	
 data1	data2	
 </pre>
 
-<div class="src-name" id="org733ae23">
+<div class="src-name" id="org4200b48">
 <p>
 sanitize<sub>str</sub>
 </p>
@@ -397,7 +397,7 @@ Our very simple regex will replace all <code>\t\n</code> occurrences with a sing
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Alberto Valdez</p>
-<p class="date">Created: 2022-08-31 Wed 17:33</p>
+<p class="date">Created: 2022-09-02 Fri 01:50</p>
 </div>
 </body>
 </html>

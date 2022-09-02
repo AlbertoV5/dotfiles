@@ -3,7 +3,6 @@
 #+SETUPFILE: ./theme.setup
 #+SETUPFILE: ./header.setup
 
-
 * Introduction
 
 This Python module consist of wrappers for org-mode source blocks that do post-processing on the results in order to format them into HTML or other document types.
@@ -52,10 +51,10 @@ def build_row(parent: Element, data: str, tag: str) -> Element:
     return child
 # XML
 def build_html(data: str) -> Element:
-    data = data.split("\n")
+    data_list = data.split("\n")
     table = Element("table")
-    build_row(table, data[0], "th")
-    for row in data[1:-1]:
+    build_row(table, data_list[0], "th")
+    for row in data_list[1:-1]:
         build_row(table, row, "td")
     return table
 
@@ -69,7 +68,6 @@ dump(table)
 #+end_export
 
 We are post-processing the results of an Elisp block, which is really easy to deal with as a string evaluates to itself, but we can apply the same principle to fairly more complex results.
-
 
 ** Case 1: Format C Code
 
@@ -156,7 +154,7 @@ emp_no	first_name	last_name	title	from_date	to_date
 #+end_example
 
 #+NAME: query_titles2.sql
-#+begin_src sql :post wrap_table.py(data=*this*)
+#+begin_src sql :post wrap_table.py(data=*this*) :wrap export html
 SELECT * FROM unique_titles
 LIMIT 5;
 #+end_src
@@ -196,7 +194,7 @@ echo "files" && ls
 
 #+RESULTS: list_files_2.sh
 #+begin_export html
-<table><tr><th>files</th></tr><tr><td>__pycache__</td></tr><tr><td>headers.setup</td></tr><tr><td>pow.html</td></tr><tr><td>pow.org</td></tr><tr><td>pow.py</td></tr><tr><td>tangled</td></tr><tr><td>the_best_fare_per_driver.png</td></tr><tr><td>theme-readtheorg-local.setup</td></tr></table>
+<table><tr><th>files</th></tr><tr><td>(concat "src</td></tr><tr><td>(concat "tangled</td></tr><tr><td>best_fare_price.png</td></tr><tr><td>header.setup</td></tr><tr><td>pow.html</td></tr><tr><td>pow.org</td></tr><tr><td>src</td></tr><tr><td>tangled</td></tr><tr><td>temp.org</td></tr><tr><td>theme.setup</td></tr></table>
 #+end_export
 
 
