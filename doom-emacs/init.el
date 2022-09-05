@@ -66,59 +66,7 @@
 ;; PYTHON
 (setq python-shell-completion-native-enable nil)
 
-;; C / C++
 
-;; PUBLISH
-
-(defun my/org-setup-html ()
-  (setq org-export-with-toc t)
-  (setq org-publish-project-alist
-      '(("my-project-html"
-        :base-directory "."
-        :base-extension "org"
-        :publishing-directory "../public"
-        :publishing-function org-html-publish-to-html
-        :recursive t
-        ;;:makeindex t
-      )
-        ("org-static"
-         :base-directory "."
-         :base-extension "png\\|jpg\\|jpeg\\|gif\\|svg\\|html\\|css\\|js"
-         :publishing-directory "../public"
-         :recursive t
-         :publishing-function org-publish-attachment
- ))))
-
-(defun my/org-setup-gfm ()
-  (setq org-export-with-toc nil)
-  (setq org-publish-project-alist
-      '(("my-project-gfm"
-        :base-directory "."
-        :base-extension "org"
-        :publishing-directory "../docs"
-        :publishing-function org-gfm-publish-to-gfm
-        :recursive t
-        ;;:makeindex t
-      )
-        ("org-static-gfm"
-         :base-directory "."
-         :base-extension "png\\|jpg\\|jpeg\\|gif\\|svg\\|html\\|css\\|js"
-         :publishing-directory "../docs"
-         :recursive t
-         :publishing-function org-publish-attachment
-))))
-
-(defun my/org-publish-all (force &optional)
-  "Publishes my-project in all formats, pass t to force."
-  (interactive)
-  (run-python)
-  (my/org-setup-gfm)
-  (org-publish-project "my-project-gfm" force)
-  (org-publish-project "org-static-gfm" force)
-  (my/org-setup-html)
-  (org-publish-project "my-project-html" force)
-  (org-publish-project "org-static" force)
-)
 
 ;; DOOM
 (doom! :input
@@ -235,7 +183,7 @@
        ;;elm               ; care for a cup of TEA?
        emacs-lisp        ; drown in parentheses
        ;;erlang            ; an elegant language for a more civilized age
-       ;;ess               ; emacs speaks statistics
+       ess               ; emacs speaks statistics
        ;;factor
        ;;faust             ; dsp, but you get to keep your soul
        ;;fortran           ; in FORTRAN, GOD is REAL (unless declared INTEGER)
@@ -260,7 +208,7 @@
        ;;nim               ; python + lisp at the speed of c
        ;;nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
-       (org +pretty)       ; organize your plain life in plain text
+       (org +pretty +lsp)  ; organize your plain life in plain text
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
@@ -312,6 +260,18 @@
     (t (:italic nil
         :foreground "#d9ce96"
         :bold nil))))
+(face-spec-set 'tree-sitter-hl-face:function.macro '(
+    (t (:italic nil
+        :foreground "#d9ce96"
+        :bold nil))))
+(face-spec-set 'tree-sitter-hl-face:function.special '(
+    (t (:italic nil
+        :foreground "#a9dbfa"
+        :bold nil))))
+(face-spec-set 'tree-sitter-hl-face:function.macro '(
+    (t (:italic nil
+        :foreground "#a9dbfa"
+        :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:function.builtin '(
     (t (:foreground "#C586C0"
         :bold nil))))
@@ -335,7 +295,7 @@
     (t (:foreground "#c5937c"
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:constant '(
-    (t (:foreground "#d0d0d0"
+    (t (:foreground "#d8d8d8"
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:constant.builtin '(
     (t (:foreground "#339CDB"

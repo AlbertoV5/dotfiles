@@ -1,8 +1,0 @@
-#+title: Readme
-#+subtitle:
-#+author:
-#+email:
-#+SETUPFILE: ./header.config
-#+SETUPFILE: ./theme.config
-
-* Welcome

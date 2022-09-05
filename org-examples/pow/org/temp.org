@@ -1,8 +1,8 @@
 #+title:    Challenge
 #+author:   Alberto Valdez
 #+email:    avq5ac1@gmail.com
-#+SETUPFILE: ./theme-readtheorg-local.setup
-#+SETUPFILE: ./headers.setup
+#+SETUPFILE: ./header.setup
+#+SETUPFILE: ./theme.setup
 
 * PyBer City Type Analysis
 
@@ -145,15 +145,14 @@ We can improve fares and optimize the number of drivers across all cities by mak
 Data transformation and visualization are critical tools to help us make decisions by having a better appreciation of the data. Python makes it easy for us to generate charts programatically, so much so that we can save our favorite chart configurations in a package for later use.
 
 #+begin_src python :results output replace :results value org :return my_methods
-from pyberlib import Pyber
+# from pyberlib import Pyber
 
-my_methods = [m for m in dir(Pyber) if "__" not in m]
+# my_methods = [m for m in dir(Pyber) if "__" not in m]
 #+end_src
 
 #+RESULTS:
-#+begin_src org
-['_get_squared_figure', '_get_ultra_wide_figure', '_get_wide_figure', '_plot_bubble', 'bubble_text_args', 'city_types', 'colormap', 'colormap_reversed', 'colors', 'dpi', 'fontsize', 'plot_box_and_whiskers', 'plot_bubble_combined', 'plot_bubble_many', 'plot_pie_chart', 'plot_timeseries', 'savefig']
-#+end_src
+#+begin_example
+#+end_example
 
 #+attr_html: :width 600px
 [[./analysis/ridesharing.png]]

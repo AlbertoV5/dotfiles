@@ -1,19 +1,19 @@
 # -*- mode: org; -*-
-# GENERAL header
+# GENERAL
 #+PROPERTY: header-args :dir .. :mkdirp yes :exports both :noweb strip-export :tangle (concat "../src/" (org-element-property :name (org-element-context))) :comments link :results output replace :wrap example
-# SHELL header
-#+PROPERTY: header-args:shell
-# JAVASCRIPT header
-#+PROPERTY: header-args:js
-# GO header
-#+PROPERTY: header-args:go
-# PYTHON header
+# PYTHON
 #+PROPERTY: header-args:python :session Python
-# ELISP header
+# ELISP
 #+PROPERTY: header-args:elisp :results value org
-# SQL header
+# SHELL
+#+PROPERTY: header-args:shell
+# SQL
 #+PROPERTY: header-args:sql :engine postgresql :dbhost localhost :dbuser postgres :database PH-EmployeeDB
-# C header
+# JS
+#+PROPERTY: header-args:js
+# GO
+#+PROPERTY: header-args:go
+# C
 #+PROPERTY: header-args:C :includes <stdlib.h> <stdio.h> <ctype.h> <assert.h> :flags -Wall -Werror -std=gnu99 -g -I . :main no
 
 #+NAME: module/name.el

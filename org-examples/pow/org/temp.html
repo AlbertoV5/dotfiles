@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-09-02 Fri 02:45 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Challenge</title>
+<meta name="author" content="Alberto Valdez" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="/Users/albertovaldez/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/Users/albertovaldez/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
+<script src="/Users/albertovaldez/org-html-themes/src/lib/js/jquery.min.js"></script>
+<script src="/Users/albertovaldez/org-html-themes/src/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/Users/albertovaldez/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/Users/albertovaldez/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Challenge</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org1f01b69">1. PyBer City Type Analysis</a>
+<ul>
+<li><a href="#org32b7ea1">1.1. Overview</a></li>
+<li><a href="#org9b07539">1.2. Results</a></li>
+<li><a href="#org45fabaf">1.3. Where to start? Best Fare Price for Urban cities.</a></li>
+<li><a href="#orgea01dc5">1.4. From Urban to Rural or to other cities?</a></li>
+<li><a href="#orgf517e2a">1.5. When is best to move the Drivers?</a></li>
+<li><a href="#org15612f3">1.6. Summary</a></li>
+<li><a href="#org41db138">1.7. Closing Thoughts</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org1f01b69" class="outline-2">
+<h2 id="org1f01b69"><span class="section-number-2">1.</span> PyBer City Type Analysis</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-org32b7ea1" class="outline-3">
+<h3 id="org32b7ea1"><span class="section-number-3">1.1.</span> Overview</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+In this project, we analyzed the fare, drivers and rides data from PyBer, a ride-sharing app company, and we created many charts to help us visualize the results. Thanks to our analysis, we can draw some conclusions that will help the company make decisions on how to improve its service.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9b07539" class="outline-3">
+<h3 id="org9b07539"><span class="section-number-3">1.2.</span> Results</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+Our first impression of the data was that we had a very unbalanced distribution from one city type to another. The amount of drivers in the Urban areas is about thirty times more than in the Rural areas.
+</p>
+
+
+<div id="org8f3f903" class="figure">
+<p><img src="./analysis/pyberlib/percentage_drivers.png" alt="percentage_drivers.png" width="400px" />
+</p>
+</div>
+
+<p>
+Here is a summary of the Total results per City Type.
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">City Type</th>
+<th scope="col" class="org-right">Total Rides</th>
+<th scope="col" class="org-right">Total Drivers</th>
+<th scope="col" class="org-left">Total Fares</th>
+<th scope="col" class="org-left">Average Fare per Ride</th>
+<th scope="col" class="org-left">Average Fare per Driver</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Rural</td>
+<td class="org-right">125</td>
+<td class="org-right">78</td>
+<td class="org-left">$4,327.93</td>
+<td class="org-left">$34.62</td>
+<td class="org-left">$55.49</td>
+</tr>
+
+<tr>
+<td class="org-left">Suburban</td>
+<td class="org-right">625</td>
+<td class="org-right">490</td>
+<td class="org-left">$19,356.33</td>
+<td class="org-left">$30.97</td>
+<td class="org-left">$39.50</td>
+</tr>
+
+<tr>
+<td class="org-left">Urban</td>
+<td class="org-right">1,625</td>
+<td class="org-right">2,405</td>
+<td class="org-left">$39,854.38</td>
+<td class="org-left">$24.53</td>
+<td class="org-left">$16.57</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+There are a lot of Drivers and Rides in the Urban cities, but compared to the other city types, we seem to have a surplus of Drivers. It becomes more obvious when looking at the <code>Average Fare per Driver</code>, which is very small compared to the other city types.
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-org45fabaf" class="outline-3">
+<h3 id="org45fabaf"><span class="section-number-3">1.3.</span> Where to start? Best Fare Price for Urban cities.</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+The Urban results differ a lot from the Rural ones, so in order to find a better amount of Drivers, we will compare them first to the Suburban results.
+</p>
+
+<p>
+In the following code, we will look for the number of drivers in Urban cities that will give us the best Total Fare at the same amount of rides.
+</p>
+
+<div class="src-name" id="org6d5e2f7">
+<p>
+wrap<sub>img</sub><sub>html.py</sub>
+</p>
+
+</div>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #339CDB;">import</span> re
+
+<span style="color: #a9dbfa;">files</span> <span style="color: #d0d0d0;">=</span> re.<span style="color: #d9ce96;">sub</span>(<span style="color: #c5937c;">"['\[\]]"</span>, <span style="color: #c5937c;">""</span>, files).<span style="color: #d9ce96;">split</span>(<span style="color: #c5937c;">","</span>)
+<span style="color: #339CDB;">for</span> <span style="color: #a9dbfa;">f</span> <span style="color: #339CDB;">in</span> files:
+    <span style="color: #C586C0;">print</span>(<span style="color: #c5937c;">f"#+attr_html: :width </span><span style="color: #339CDB; background-color: #252525;">{</span><span style="color: #a9dbfa; background-color: #252525;">width</span><span style="color: #339CDB; background-color: #252525;">}</span><span style="color: #c5937c;">px"</span>)
+    <span style="color: #C586C0;">print</span>(<span style="color: #c5937c;">f"file:</span><span style="color: #339CDB; background-color: #252525;">{</span><span style="color: #a9dbfa; background-color: #252525;">f.</span><span style="color: #d9ce96; background-color: #252525;">strip</span><span style="color: #a9dbfa; background-color: #252525;">()</span><span style="color: #339CDB; background-color: #252525;">}</span><span style="color: #c5937c;">"</span>)
+</pre>
+</div>
+
+<pre class="example" id="orgea8a964">
+#+attr_html: :width 480px
+file:img.png
+#+attr_html: :width 480px
+file:img2.png
+</pre>
+
+<div class="src-name" id="orgbb1097c">
+<p>
+best<sub>fare</sub><sub>price.py</sub>
+</p>
+
+</div>
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr"> 1: </span><span style="color: #339CDB;">import</span> numpy <span style="color: #339CDB;">as</span> np
+<span class="linenr"> 2: </span><span style="color: #339CDB;">import</span> matplotlib.pyplot <span style="color: #339CDB;">as</span> plt
+<span class="linenr"> 3: </span><span style="color: #339CDB;">from</span> pathlib <span style="color: #339CDB;">import</span> <span style="color: #35CDAF;">Path</span>
+<span class="linenr"> 4: </span>
+<span class="linenr"> 5: </span>plt.<span style="color: #a9dbfa;">style</span>.<span style="color: #d9ce96;">use</span>(<span style="color: #c5937c;">'bmh'</span>)
+<span class="linenr"> 6: </span><span style="color: #579C4C;"># Creating lines from Urban to Suburban</span>
+<span class="linenr"> 7: </span><span style="color: #a9dbfa;">drivers</span> <span style="color: #d0d0d0;">=</span> np.<span style="color: #d9ce96;">linspace</span>(<span style="color: #BBCCAA;">490</span>, <span style="color: #BBCCAA;">2405</span>, <span style="color: #BBCCAA;">100</span>)
+<span class="linenr"> 8: </span><span style="color: #a9dbfa;">fare_per_ride</span> <span style="color: #d0d0d0;">=</span> np.<span style="color: #d9ce96;">linspace</span>(<span style="color: #BBCCAA;">30.97</span>, <span style="color: #BBCCAA;">24.53</span>, <span style="color: #BBCCAA;">100</span>)
+<span class="linenr"> 9: </span><span style="color: #a9dbfa;">fare_per_driver</span> <span style="color: #d0d0d0;">=</span> np.<span style="color: #d9ce96;">linspace</span>(<span style="color: #BBCCAA;">39.50</span>, <span style="color: #BBCCAA;">16.57</span>, <span style="color: #BBCCAA;">100</span>)
+<span class="linenr">10: </span><span style="color: #579C4C;"># Expecting the amount of Rides to be independent of Drivers</span>
+<span class="linenr">11: </span><span style="color: #a9dbfa;">rides</span> <span style="color: #d0d0d0;">=</span> <span style="color: #BBCCAA;">1625</span>
+<span class="linenr">12: </span><span style="color: #a9dbfa;">rides_per_driver</span> <span style="color: #d0d0d0;">=</span> rides <span style="color: #d0d0d0;">/</span> drivers
+<span class="linenr">13: </span>
+<span class="linenr">14: </span><span style="color: #579C4C;"># Find the index of the max total fare</span>
+<span class="linenr">15: </span><span style="color: #a9dbfa;">total_fares</span> <span style="color: #d0d0d0;">=</span> drivers <span style="color: #d0d0d0;">*</span> fare_per_driver
+<span class="linenr">16: </span><span style="color: #a9dbfa;">m</span> <span style="color: #d0d0d0;">=</span> np.<span style="color: #d9ce96;">argmax</span>(total_fares)
+<span class="linenr">17: </span><span style="color: #a9dbfa;">point</span> <span style="color: #d0d0d0;">=</span> rides_per_driver[m], fare_per_driver[m]
+<span class="linenr">18: </span><span style="color: #a9dbfa;">driver_count</span> <span style="color: #d0d0d0;">=</span> drivers[m]
+<span class="linenr">19: </span><span style="color: #a9dbfa;">best_fare</span> <span style="color: #d0d0d0;">=</span> total_fares[m]
+<span class="linenr">20: </span>
+<span class="linenr">21: </span><span style="color: #579C4C;"># Plotting</span>
+<span class="linenr">22: </span>plt.<span style="color: #d9ce96;">plot</span>(rides_per_driver, fare_per_driver, <span style="color: #a9dbfa;">label</span><span style="color: #d0d0d0;">=</span><span style="color: #c5937c;">"Urban to Suburban"</span>)
+<span class="linenr">23: </span>plt.<span style="color: #d9ce96;">plot</span>(point[<span style="color: #BBCCAA;">0</span>], point[<span style="color: #BBCCAA;">1</span>], <span style="color: #c5937c;">"ko"</span>)
+<span class="linenr">24: </span>plt.<span style="color: #d9ce96;">text</span>(
+<span class="linenr">25: </span>    <span style="color: #BBCCAA;">1</span>, <span style="color: #BBCCAA;">20</span>,
+<span class="linenr">26: </span>    (<span style="color: #c5937c;">f"Drivers: </span><span style="color: #339CDB; background-color: #252525;">{</span><span style="color: #a9dbfa; background-color: #252525;">driver_count:,.0f</span><span style="color: #339CDB; background-color: #252525;">}</span><span style="color: #339CDB;">\n</span><span style="color: #c5937c;">Fare: $</span><span style="color: #339CDB; background-color: #252525;">{</span><span style="color: #a9dbfa; background-color: #252525;">point[</span><span style="color: #BBCCAA; background-color: #252525;">1</span><span style="color: #a9dbfa; background-color: #252525;">]:,.2f</span><span style="color: #339CDB; background-color: #252525;">}</span><span style="color: #c5937c;">"</span>
+<span class="linenr">27: </span>     <span style="color: #c5937c;">f"</span><span style="color: #339CDB;">\n</span><span style="color: #c5937c;">Total Fare: $</span><span style="color: #339CDB; background-color: #252525;">{</span><span style="color: #a9dbfa; background-color: #252525;">best_fare:,.2f</span><span style="color: #339CDB; background-color: #252525;">}</span><span style="color: #c5937c;">"</span>),
+<span class="linenr">28: </span>    <span style="color: #a9dbfa;">fontsize</span><span style="color: #d0d0d0;">=</span><span style="color: #BBCCAA;">12</span>,
+<span class="linenr">29: </span>    <span style="color: #a9dbfa;">bbox</span> <span style="color: #d0d0d0;">=</span> <span style="color: #C586C0;">dict</span>(<span style="color: #a9dbfa;">facecolor</span><span style="color: #d0d0d0;">=</span><span style="color: #c5937c;">"white"</span>, <span style="color: #a9dbfa;">alpha</span><span style="color: #d0d0d0;">=</span><span style="color: #BBCCAA;">0.8</span>),
+<span class="linenr">30: </span>)
+<span class="linenr">31: </span>plt.<span style="color: #d9ce96;">title</span>(<span style="color: #c5937c;">f"Best Fare per Driver for Urban cities"</span>, <span style="color: #a9dbfa;">fontsize</span><span style="color: #d0d0d0;">=</span><span style="color: #BBCCAA;">16</span>)
+<span class="linenr">32: </span>plt.<span style="color: #d9ce96;">ylabel</span>(<span style="color: #c5937c;">"Fare per Driver"</span>)
+<span class="linenr">33: </span>plt.<span style="color: #d9ce96;">xlabel</span>(<span style="color: #c5937c;">"Rides per Driver at 1,625 Rides"</span>)
+<span class="linenr">34: </span>plt.<span style="color: #d9ce96;">legend</span>()
+<span class="linenr">35: </span>plt.<span style="color: #d9ce96;">tight_layout</span>()
+<span class="linenr">36: </span>plt.<span style="color: #d9ce96;">savefig</span>(files[<span style="color: #BBCCAA;">0</span>], <span style="color: #a9dbfa;">dpi</span><span style="color: #d0d0d0;">=</span><span style="color: #BBCCAA;">200</span>)
+<span class="linenr">37: </span>plt.<span style="color: #d9ce96;">close</span>()
+<span class="linenr">38: </span><span style="color: #C586C0;">print</span>(files, <span style="color: #a9dbfa;">end</span><span style="color: #d0d0d0;">=</span><span style="color: #c5937c;">""</span>)
+</pre>
+</div>
+
+<div class="org" id="orgc7dbd3a">
+
+<div id="org68705dc" class="figure">
+<p><img src="best_fare_price.png" alt="best_fare_price.png" width="480px" />
+</p>
+</div>
+
+</div>
+
+
+<p>
+We found that; assuming a linear relationship in the results of Urban and Suburban cities, the number of drivers that would generate the largest Total Fare for Urban cities is <code>1,902 drivers</code>. In theory, this follows a supply and demand model, giving us a total of <code>$42,971.62</code> Total Fare with that amount of drivers.
+</p>
+
+<p>
+Because we are concerned about the effects of reducing the number of drivers, we charted the <code>Rides per Driver</code> on the x-axis. We can see that the load is not dramatically increased at the <code>Best Fare</code>, which means that the result is favorable.
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-orgea01dc5" class="outline-3">
+<h3 id="orgea01dc5"><span class="section-number-3">1.4.</span> From Urban to Rural or to other cities?</h3>
+<div class="outline-text-3" id="text-1-4">
+<p>
+Now that we know how many drivers we can move out of the Urban cities, we should find which cities have the most drivers and which ones have the most rides. We can better appreciate the distribution of drivers with a Box and Whiskers chart.
+</p>
+
+<div id="orga3062f9" class="figure">
+<p><img src="./analysis/pyberlib/citytype_rides.png" alt="citytype_rides.png" width="500px" />
+</p>
+</div>
+
+<p>
+Maybe we can start thinking about separating cities by the number of rides because the difference in rides in Urban cities is three times the difference in Rural and almost two times the difference in Suburban cities. This would help us find the surplus of drivers in specific groups of cities rather than broad categories.
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-orgf517e2a" class="outline-3">
+<h3 id="orgf517e2a"><span class="section-number-3">1.5.</span> When is best to move the Drivers?</h3>
+<div class="outline-text-3" id="text-1-5">
+<p>
+Finally, we can generate a time series chart to visualize the Total Fare by city type to try to find at which point in time is best to move drivers from one city type to another. This will help us minimize a reduction in Total Fare caused by the logistics of changing our current distribution of drivers.
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">date</th>
+<th scope="col" class="org-right">Rural</th>
+<th scope="col" class="org-right">Suburban</th>
+<th scope="col" class="org-right">Urban</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">2019-01-06</td>
+<td class="org-right">187.92</td>
+<td class="org-right">721.60</td>
+<td class="org-right">1661.68</td>
+</tr>
+
+<tr>
+<td class="org-right">2019-01-13</td>
+<td class="org-right">67.65</td>
+<td class="org-right">1105.13</td>
+<td class="org-right">2050.43</td>
+</tr>
+
+<tr>
+<td class="org-right">2019-01-20</td>
+<td class="org-right">306.00</td>
+<td class="org-right">1218.20</td>
+<td class="org-right">1939.02</td>
+</tr>
+
+<tr>
+<td class="org-right">2019-01-27</td>
+<td class="org-right">179.69</td>
+<td class="org-right">1203.28</td>
+<td class="org-right">2129.51</td>
+</tr>
+
+<tr>
+<td class="org-right">2019-02-03</td>
+<td class="org-right">333.08</td>
+<td class="org-right">1042.79</td>
+<td class="org-right">2086.94</td>
+</tr>
+</tbody>
+</table>
+
+
+<div id="orge7b87aa" class="figure">
+<p><img src="./analysis/pyberlib/PyBer_fare_summary.png" alt="PyBer_fare_summary.png" width="700px" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org15612f3" class="outline-3">
+<h3 id="org15612f3"><span class="section-number-3">1.6.</span> Summary</h3>
+<div class="outline-text-3" id="text-1-6">
+<p>
+We can improve fares and optimize the number of drivers across all cities by making the following changes:
+</p>
+
+<ol class="org-ol">
+<li>Improve the distribution of drivers in the Urban cities by moving from cities with low rides and a high number of drivers to cities with high rides and the low number of drivers.</li>
+<li>Move about <code>500 drivers</code> out of the Urban cities into Suburban cities as the distributions are closer. Then move from Suburban cities to Rural areas. Before starting the transition, make sure that the Suburban and Rural areas won&rsquo;t be heavily affected by the surplus of drivers. If they would, then either move fewer drivers knowing that the Total Fare won&rsquo;t be optimal; or, as a last resort, consider letting go of a few drivers.</li>
+<li>Execute the transition from Urban to Suburban at the start of February and from Suburban to Rural at the start of March as those seem to be the dates with less activity and less Total Fare for each category.</li>
+</ol>
+</div>
+</div>
+
+
+<div id="outline-container-org41db138" class="outline-3">
+<h3 id="org41db138"><span class="section-number-3">1.7.</span> Closing Thoughts</h3>
+<div class="outline-text-3" id="text-1-7">
+<p>
+Data transformation and visualization are critical tools to help us make decisions by having a better appreciation of the data. Python makes it easy for us to generate charts programatically, so much so that we can save our favorite chart configurations in a package for later use.
+</p>
+
+<div class="src-name" id="orge603664">
+<p>
+
+</p>
+
+</div>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #579C4C;"># from pyberlib import Pyber</span>
+
+<span style="color: #579C4C;"># my_methods = [m for m in dir(Pyber) if "__" not in m]</span>
+</pre>
+</div>
+
+<pre class="example" id="org54080d3">
+
+</pre>
+
+
+<div id="orgd50145c" class="figure">
+<p><img src="./analysis/ridesharing.png" alt="ridesharing.png" width="600px" />
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Alberto Valdez</p>
+<p class="date">Created: 2022-09-02 Fri 02:45</p>
+</div>
+</body>
+</html>

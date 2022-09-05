@@ -25,8 +25,9 @@ Can be an integer to determine the exact padding."
   ((bg         '("#1e1e1e" "#1e1e1e" nil))
    (bg-alt     '("#252526" "#222222"  nil))
    (base0      '("#171F24" "#111122"   "black"))
-   (base1      '("#1C1C1C" "#1C1C1C" "brightblack"))
+   (base1      '("#1e1e1e" "#1e1e1e" "brightblack"))
    ;; modded
+   (base2a     '("#252525" "#252525" "brightblack"))
    (base2      '("#2a2a2a" "#2a2a2a" "brightblack"))
    (base3      '("#313131" "#3a3a3a" "brightblack"))
    (base4      '("#4b474c" "#444444" "brightblack"))
@@ -156,9 +157,9 @@ Can be an integer to determine the exact padding."
    (Man-overstrike :inherit 'bold :foreground magenta)
    (Man-underline :inherit 'underline :foreground blue)
    ;;;; org <built-in>
-   ((org-block &override) :background base1)
-   ((org-block-background &override) :background base1)
-   ((org-block-begin-line &override) :background base1)
+   ((org-block &override) :background base2a)
+   ((org-block-background &override) :background base2a)
+   ((org-block-begin-line &override) :background base2a)
    ;;;; org-pomodoro
    (org-pomodoro-mode-line :inherit 'mode-line-emphasis) ; unreadable otherwise
    (org-pomodoro-mode-line-overtime :inherit 'org-pomodoro-mode-line)
