@@ -23,8 +23,6 @@
 (eval-after-load "org"
   '(require 'ox-gfm nil t))
 
-(setq org-babel-exp-code-template "#+begin_src-name\n%name\n#+end_src-name\n#+begin_src %lang%switches%flags\n%body\n#+end_src")
-
 ;; TREEMACS
 (setq treemacs--width-is-locked nil)
 (setq treemacs-width 24)
@@ -197,7 +195,7 @@
        ;;idris             ; a language you can depend on
        json              ; At least it ain't XML
        ;;(java +lsp)       ; the poster child for carpal tunnel syndrome
-       (javascript +tree-sitter)        ; all(hope(abandon(ye(who(enter(here))))))
+       (javascript +lsp +tree-sitter)        ; all(hope(abandon(ye(who(enter(here))))))
        ;;julia             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
        (latex +fold)       ; writing papers in Emacs has never been so fun
@@ -298,7 +296,7 @@
     (t (:foreground "#d8d8d8"
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:constant.builtin '(
-    (t (:foreground "#339CDB"
+    (t (:foreground "#a9dbfa"
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:number '(
     (t (:foreground "#BBCCAA"
