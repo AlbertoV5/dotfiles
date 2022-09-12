@@ -195,7 +195,7 @@
        ;;idris             ; a language you can depend on
        json              ; At least it ain't XML
        ;;(java +lsp)       ; the poster child for carpal tunnel syndrome
-       (javascript +lsp +tree-sitter)        ; all(hope(abandon(ye(who(enter(here))))))
+       (javascript +tree-sitter +lsp)        ; all(hope(abandon(ye(who(enter(here))))))
        ;;julia             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
        (latex +fold)       ; writing papers in Emacs has never been so fun
@@ -219,7 +219,7 @@
        ;;(ruby +rails)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
        ;;rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
        scala             ; java, but good
-       ;;(scheme +guile)   ; a fully conniving family of lisps
+       (scheme +guile)   ; a fully conniving family of lisps
        (sh +tree-sitter)   ; she sells {ba,z,fi}sh shells on the C xor
        ;;sml
        ;;solidity          ; do you need a blockchain? No.
@@ -249,91 +249,92 @@
 
 ;; https://github.com/emacs-t@variableree-sitter/tree-sitter-langs
 ;;/Users/albertovaldez/.emacs.d/.local/straight/repos/elisp-tree-sitter/langs/queries/python
-
+(face-spec-set 'tree-sitter-hl-face:punctuation.delimiter '(
+    (t (:foreground "#eeeeee"
+        :background "#252525"
+        :alpha 0
+        :bold nil))))
+(face-spec-set 'tree-sitter-hl-face:punctuation.bracket '(
+    (t (:foreground "#eeeeee"
+        :background "#252525"
+        :alpha 0
+        :bold nil))))
+(face-spec-set 'tree-sitter-hl-face:constant '((t (:foreground "#eeeeee" :bold nil))))
+(face-spec-set 'tree-sitter-hl-face:operator '((t (:foreground "#eeeeee" :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:function '(
     (t (:italic nil
-        :foreground "#d9ce96"
+        :foreground "#DCDCAA"
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:function.call '(
     (t (:italic nil
-        :foreground "#d9ce96"
+        :foreground "#DCDCAA"
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:function.macro '(
     (t (:italic nil
-        :foreground "#d9ce96"
+        :foreground "#DCDCAA"
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:function.special '(
     (t (:italic nil
-        :foreground "#a9dbfa"
+        :foreground "#9CDCFE"
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:function.macro '(
     (t (:italic nil
-        :foreground "#a9dbfa"
+        :foreground "#9CDCFE"
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:function.builtin '(
     (t (:foreground "#C586C0"
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:property '(
-    (t (:foreground "#a9dbfa"
+    (t (:foreground "#9CDCFE"
         :italic nil
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:label '(
-    (t (:foreground "#a9dbfa"
+    (t (:foreground "#9CDCFE"
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:variable.parameter '(
-    (t (:foreground "#a9dbfa"
+    (t (:foreground "#9CDCFE"
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:variable '(
-    (t (:foreground "#a9dbfa"
+    (t (:foreground "#9CDCFE"
+        :bold nil))))
+(face-spec-set 'tree-sitter-hl-face:variable.builtin '(
+    (t (:foreground "#569CD6"
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:variable.special '(
-    (t (:foreground "#a9dbfa"
+    (t (:foreground "#9CDCFE"
+        :bold nil))))
+(face-spec-set 'tree-sitter-hl-face:property.definition '(
+    (t (:foreground "#9CDCFE"
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:string '(
-    (t (:foreground "#c5937c"
-        :bold nil))))
-(face-spec-set 'tree-sitter-hl-face:constant '(
-    (t (:foreground "#d8d8d8"
+    (t (:foreground "#CE9178"
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:constant.builtin '(
-    (t (:foreground "#a9dbfa"
+    (t (:foreground "#9CDCFE"
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:number '(
     (t (:foreground "#BBCCAA"
         :bold nil))))
-(face-spec-set 'tree-sitter-hl-face:operator '(
-    (t (:foreground "#d0d0d0"
-        :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:type '(
-    (t (:foreground "#35CDAF"
+    (t (:foreground "#4EC9B0"
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:type.argument '(
-    (t (:foreground "#35CDAF"
+    (t (:foreground "#4EC9B0"
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:type.builtin '(
-    (t (:foreground "#35CDAF"
+    (t (:foreground "#4EC9B0"
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:type.super '(
-    (t (:foreground "#35CDAF"
+    (t (:foreground "#4EC9B0"
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:escape '(
-    (t (:foreground "#339CDB"
+    (t (:foreground "#569CD6"
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:keyword '(
-    (t (:foreground "#339CDB"
+    (t (:foreground "#569CD6"
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:doc '(
-    (t (:foreground "#c5937c"
-        :bold nil))))
-(face-spec-set 'tree-sitter-hl-face:punctuation.delimiter '(
-    (t (:foreground "#d0d0d0"
-        :background "#252525"
-        :alpha 0
-        :bold nil))))
-(face-spec-set 'tree-sitter-hl-face:punctuation.bracket '(
-    (t (:foreground "#d0d0d0"
-        :background "#252525"
-        :alpha 0
+    (t (:foreground "#CE9178"
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:punctuation.special '(
     (t (:background "#252525"
@@ -344,7 +345,7 @@
         :alpha 0
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:embedded '(
-    (t (:foreground "#a9dbfa"
+    (t (:foreground "#9CDCFE"
         :background "#252525"
         :alpha 0
         :bold nil))))

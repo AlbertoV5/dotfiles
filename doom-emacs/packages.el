@@ -10,6 +10,7 @@
 ; (package! exec-path-from-shell)
 (package! ox-gfm)
 (package! org-tanglesync)
+(package! ob-typescript)
 ;; (package! lsp-grammarly)
 ;; (package! rainbow-mode)
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
