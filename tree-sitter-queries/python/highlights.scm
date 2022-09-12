@@ -56,7 +56,7 @@
 
 ;; Literals.
 
-[(none) (true) (false)] @constant.builtin
+[(none) (true) (false)] @keyword ;; @constant.builtin
 [(integer) (float)] @number
 
 ;; Identifier naming conventions.
@@ -168,3 +168,18 @@
 (string) @string
 
 (decorator) @function.special
+
+;; (import_statement (dotted_name (identifier)) @type)
+;; (import_statement (aliased_import (dotted_name (identifier))) @type
+;;   (.match? @type "[as]\\s(\\w)"))
+
+;; Custom.
+
+(import_statement name: (dotted_name (identifier)) @name) @type
+(import_from_statement name: (dotted_name (identifier)) @name) @type
+(import_from_statement) @type
+(import_statement (aliased_import (dotted_name (identifier))) @type
+  (.match? @type "[as]\\s(\\w)"))
+
+((call (attribute (identifier) @type))
+    (.match? @type "^(re|pd|np|bs)"))
