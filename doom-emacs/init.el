@@ -23,6 +23,7 @@
 (eval-after-load "org"
   '(require 'ox-gfm nil t))
 
+
 ;; TREEMACS
 (setq treemacs--width-is-locked nil)
 (setq treemacs-width 24)
@@ -35,9 +36,9 @@
 (setq default-frame-alist '((width . 126) (height . 50)))
 ;; (add-to-list 'default-frame-alist '(alpha . (90 . 90)))
 (add-to-list 'default-frame-alist '(alpha . (100 . 100)))
-
 ;; Custom org colors
 (custom-theme-set-faces 'user
+                        `(highlight-numbers-number ((t (:bold nil))))
                         `(org-level-1 ((t (:foreground "#c8c8c8" :bold t))))
                         `(org-level-2 ((t (:foreground "#c8c8c8":bold t))))
                         `(org-level-3 ((t (:foreground "#c8c8c8":bold t))))
@@ -63,7 +64,6 @@
 
 ;; PYTHON
 (setq python-shell-completion-native-enable nil)
-
 
 
 ;; DOOM
@@ -225,7 +225,7 @@
        ;;solidity          ; do you need a blockchain? No.
        ;;swift             ; who asked for emoji variables?
        ;;terra             ; Earth and Moon in alignment for performance.
-       web               ; the tubes
+       (web +tree-sitter)  ; the tubes
        yaml              ; JSON, but readable
        ;;zig               ; C, but simpler
 
@@ -249,29 +249,30 @@
 
 ;; https://github.com/emacs-t@variableree-sitter/tree-sitter-langs
 ;;/Users/albertovaldez/.emacs.d/.local/straight/repos/elisp-tree-sitter/langs/queries/python
+(tree-sitter-langs--init-major-mode-alist)
 (face-spec-set 'tree-sitter-hl-face:punctuation.delimiter '(
-    (t (:foreground "#eeeeee"
+    (t (:foreground "#e0e0e0"
         :background "#252525"
         :alpha 0
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:punctuation.bracket '(
-    (t (:foreground "#eeeeee"
+    (t (:foreground "#e0e0e0"
         :background "#252525"
         :alpha 0
         :bold nil))))
-(face-spec-set 'tree-sitter-hl-face:constant '((t (:foreground "#eeeeee" :bold nil))))
-(face-spec-set 'tree-sitter-hl-face:operator '((t (:foreground "#eeeeee" :bold nil))))
+(face-spec-set 'tree-sitter-hl-face:constant '((t (:foreground "#e0e0e0" :bold nil))))
+(face-spec-set 'tree-sitter-hl-face:operator '((t (:foreground "#e0e0e0" :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:function '(
     (t (:italic nil
-        :foreground "#DCDCAA"
+        :foreground "#ded492"
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:function.call '(
     (t (:italic nil
-        :foreground "#DCDCAA"
+        :foreground "#ded492"
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:function.macro '(
     (t (:italic nil
-        :foreground "#DCDCAA"
+        :foreground "#ded492"
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:function.special '(
     (t (:italic nil

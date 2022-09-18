@@ -1,0 +1,71 @@
+#+TITLE: ob-html.el
+
+This code allows you to evaluate HTML in org-mode code blocks.
+
+[[file:./screenshot.png]]
+
+* Setup
+
+#+begin_src emacs-lisp
+(with-eval-after-load "org"
+  (require 'ob-html)
+  (org-babel-html-enable-open-src-block-result-temporary)) ;;Enable C-c C-o on html code block
+#+end_src
+
+Customize the variable ~org-babel-html-chrome-executable~ or ~org-babel-html-screenshot-method~.
+
+* Examples
+Generate html export block:
+
+#+begin_src org
+,#+begin_src html :results replace html
+<p><strong>STRONG</strong> <ins>INS</ins> <del>DEL</del></p>
+,#+end_src
+
+,#+RESULTS:
+,#+begin_export html
+<p><strong>STRONG</strong> <ins>INS</ins> <del>DEL</del></p>
+,#+end_export
+#+end_src
+
+Generate external html file:
+
+#+begin_src org
+,#+begin_src html :results replace file :file example.html
+<!DOCTYPE html>
+<html><head><title>example</title></head><body><p>Example</p></body></html>
+,#+end_src
+
+,#+RESULTS:
+[​[file:example.html]]
+#+end_src
+
+Generate screenshot image file:
+
+#+begin_src org
+,#+begin_src html :results replace file graphics :file example.png :width 640 :height 100
+<!DOCTYPE html>
+<html><head><title>example</title></head><body><p>Hello</p></body></html>
+,#+end_src
+
+,#+RESULTS:
+[​[file:example.png]]
+#+end_src
+
+Generate nothing but open HTML as temporary file:
+
+#+begin_src org
+,#+begin_src html
+<!DOCTYPE html>
+<html><head><title>example</title></head><body><p>Hello</p></body></html>
+,#+end_src
+#+end_src
+
+* ToDo
+
+- Add session support
+- Add more screenshot methods
+  - PhantomJS
+  - puppeteer
+  - PlayWright
+- Fix org-babel-html-chrome-executable

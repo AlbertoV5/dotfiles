@@ -36,7 +36,7 @@ Can be an integer to determine the exact padding."
    (base6      '("#1069ad" "#0c79cc" "brightblack"))
    (base7      '("#909090" "#909090" "brightblack"))
    (base8      '("#f4f4f4" "#a8a8a8" "white"))
-   (fg         '("#eeeeee" "#eeeeee" "brightwhite"))
+   (fg         '("#e0e0e0" "#e0e0e0" "brightwhite"))
    (fg-alt     '("#AEAFAD" "#bcbcbc" "white"))
 
    (grey base7)
@@ -46,7 +46,7 @@ Can be an integer to determine the exact padding."
    (light-green  '("#BBCCAA" "#BBCCAA" "green"))
    (teal         '("#35CDAF" "#33CCAA" "brightgreen"))
    (yellow       '("#D7BA7D" "#DDBB77" "brightyellow"))
-   (light-yellow '("#DCDCAA" "#DCDCAA" "brightyellow"))
+   (light-yellow '("#ded492" "#ded492" "brightyellow"))
    (blue         '("#569CD6" "#569CD6" "brightblue"))
    (dark-blue    '("#124F7B" "#114477" "blue"))
    (magenta      '("#C586C0" "#CC88CC" "brightmagenta"))
