@@ -23,6 +23,8 @@
 (eval-after-load "org"
   '(require 'ox-gfm nil t))
 
+(eval-after-load "org"
+  '(require 'ox-json nil t))
 
 ;; TREEMACS
 (setq treemacs--width-is-locked nil)
@@ -206,11 +208,11 @@
        ;;nim               ; python + lisp at the speed of c
        ;;nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
-       (org +pretty +lsp)  ; organize your plain life in plain text
+       (org +pretty +lsp +dragndrop)  ; organize your plain life in plain text
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
-       (python +tree-sitter +lsp +pyenv +pyright + poetry) ; beautiful is better than ugly
+       (python +tree-sitter +lsp +pyenv +pyright +poetry) ; beautiful is better than ugly
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        ;;raku              ; the artist formerly known as perl6
@@ -249,7 +251,6 @@
 
 ;; https://github.com/emacs-t@variableree-sitter/tree-sitter-langs
 ;;/Users/albertovaldez/.emacs.d/.local/straight/repos/elisp-tree-sitter/langs/queries/python
-(tree-sitter-langs--init-major-mode-alist)
 (face-spec-set 'tree-sitter-hl-face:punctuation.delimiter '(
     (t (:foreground "#e0e0e0"
         :background "#252525"
@@ -276,7 +277,7 @@
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:function.special '(
     (t (:italic nil
-        :foreground "#9CDCFE"
+        :foreground "#ded492"
         :bold nil))))
 (face-spec-set 'tree-sitter-hl-face:function.macro '(
     (t (:italic nil

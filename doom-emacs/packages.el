@@ -12,6 +12,7 @@
 (package! org-tanglesync)
 (package! ob-typescript)
 (package! ob-mongo)
+(package! ox-json)
 ;; (package! lsp-grammarly)
 ;; (package! rainbow-mode)
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
