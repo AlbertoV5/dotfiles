@@ -9,7 +9,7 @@
 ; (package! visual-fill-column)
 ; (package! exec-path-from-shell)
 (package! ox-gfm)
-(package! org-tanglesync)
+; (package! org-tanglesync)
 (package! ob-typescript)
 (package! ob-mongo)
 (package! ox-json)

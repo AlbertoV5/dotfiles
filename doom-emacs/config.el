@@ -90,7 +90,7 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
-(load! "lisp/ob-html/ob-html.el")
-(with-eval-after-load "org"
-  (require 'ob-html)
-  (org-babel-html-enable-open-src-block-result-temporary))
+; (load! "lisp/ob-html/ob-html.el")
+; (with-eval-after-load "org"
+;   (require 'ob-html)
+;   (org-babel-html-enable-open-src-block-result-temporary))

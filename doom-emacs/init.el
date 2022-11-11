@@ -52,11 +52,6 @@
                         `(org-headline-done ((t (:foreground "#c8c8c8" :bold t))))
                         )
 
-;; DITAA
-(setq org-ditaa-jar-path "/usr/local/Cellar/ditaa/0.11.0_1/libexec/ditaa-0.11.0-standalone.jar")
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((ditaa . t))) ; this line activates dita
 
 (setq lsp-ui-doc-enable t)
 (setq lsp-ui-doc-show-with-cursor t)
