@@ -28,6 +28,15 @@ latex:
 doom:
 	git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.emacs.d && ~/.emacs.d/bin/doom install
 
+dotfiles:
+	cp ./init.el ~/.doom.d/init.el
+	cp ./config.el ~/.doom.d/config.el
+	cp ./packages.el ~/.doom.d/packages.el
+	cp ./custom.el ~/.doom.d/custom.el
+	cp -r ./themes ~/.doom.d/themes
+	
+# export PATH="$HOME/.emacs.d/bin:$PATH"
+
 .PHONY: clean
 clean:
 	rm t.txt all
